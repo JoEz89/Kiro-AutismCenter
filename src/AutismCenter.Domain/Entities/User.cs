@@ -134,6 +134,15 @@ public class User : BaseEntity
         AddDomainEvent(new UserRoleChangedEvent(Id, oldRole, newRole));
     }
 
+    public void SetGoogleId(string googleId)
+    {
+        if (string.IsNullOrWhiteSpace(googleId))
+            throw new ArgumentException("Google ID cannot be empty", nameof(googleId));
+
+        GoogleId = googleId;
+        UpdateTimestamp();
+    }
+
     public string GetFullName() => $"{FirstName} {LastName}";
 
     public bool HasGoogleAccount() => !string.IsNullOrEmpty(GoogleId);

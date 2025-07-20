@@ -5,6 +5,7 @@ using AutismCenter.Application.Common.Interfaces;
 using AutismCenter.Domain.Interfaces;
 using AutismCenter.Infrastructure.Data;
 using AutismCenter.Infrastructure.Repositories;
+using AutismCenter.Infrastructure.Services;
 
 namespace AutismCenter.Infrastructure;
 
@@ -23,6 +24,9 @@ public static class DependencyInjection
 
         // Repositories
         services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
+        services.AddScoped<IEmailVerificationTokenRepository, EmailVerificationTokenRepository>();
+        services.AddScoped<IPasswordResetTokenRepository, PasswordResetTokenRepository>();
         services.AddScoped<IProductRepository, ProductRepository>();
         services.AddScoped<ICategoryRepository, CategoryRepository>();
         services.AddScoped<IOrderRepository, OrderRepository>();
@@ -30,6 +34,15 @@ public static class DependencyInjection
         services.AddScoped<IEnrollmentRepository, EnrollmentRepository>();
         services.AddScoped<IAppointmentRepository, AppointmentRepository>();
         services.AddScoped<IDoctorRepository, DoctorRepository>();
+
+        // Authentication Services
+        services.AddScoped<ITokenService, TokenService>();
+        services.AddScoped<IPasswordService, PasswordService>();
+        services.AddScoped<IAuthenticationService, AuthenticationService>();
+        services.AddScoped<IEmailVerificationService, EmailVerificationService>();
+        services.AddScoped<IPasswordResetService, PasswordResetService>();
+        services.AddScoped<IEmailService, EmailService>();
+        services.AddScoped<IGoogleAuthService, GoogleAuthService>();
 
         return services;
     }
