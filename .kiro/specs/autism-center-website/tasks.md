@@ -32,7 +32,6 @@
 
 - [x] 3. Database Schema and Infrastructure Setup
 
-
   - [x] 3.1 Create database schema and Entity Framework configuration
 
     - Implement DbContext with entity configurations
@@ -52,12 +51,7 @@
 
 - [x] 4. Authentication and Authorization System
 
-
-
-
   - [x] 4.1 Implement JWT authentication infrastructure
-
-
 
     - Create JWT token service with access and refresh token support
     - Implement password hashing and validation services
@@ -66,9 +60,7 @@
     - Write unit tests for authentication services
     - _Requirements: 4.1, 4.5, 4.7, 8.3, 8.8_
 
-
   - [x] 4.2 Build user registration and email verification
-
 
     - Implement user registration command and handler
     - Create email verification service with token generation
@@ -79,8 +71,6 @@
 
   - [x] 4.3 Implement Google OAuth integration
 
-
-
     - Set up Google OAuth configuration and client
     - Create Google authentication handler and token validation
     - Implement user account linking for existing email addresses
@@ -90,7 +80,6 @@
 
   - [x] 4.4 Create password reset functionality
 
-
     - Implement forgot password command and handler
     - Create password reset token service with expiration
     - Build password reset email templates
@@ -98,9 +87,10 @@
     - Write integration tests for password reset flow
     - _Requirements: 4.6_
 
-- [ ] 5. Application Layer - Commands and Queries
+- [-] 5. Application Layer - Commands and Queries
 
-  - [ ] 5.1 Implement user management commands and queries
+  - [x] 5.1 Implement user management commands and queries
+
 
     - Create user-related commands (CreateUser, UpdateUser, ChangePassword)
     - Implement user queries (GetUser, GetUserProfile)
