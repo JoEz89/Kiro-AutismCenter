@@ -70,6 +70,12 @@ public class OrderRepository : BaseRepository<Order>, IOrderRepository
             .AnyAsync(o => o.OrderNumber == orderNumber, cancellationToken);
     }
 
+    public async Task<bool> HasProductBeenOrderedAsync(Guid productId, CancellationToken cancellationToken = default)
+    {
+        return await Context.Set<OrderItem>()
+            .AnyAsync(oi => oi.ProductId == productId, cancellationToken);
+    }
+
     public async Task<string> GenerateOrderNumberAsync(CancellationToken cancellationToken = default)
     {
         var year = DateTime.UtcNow.Year;

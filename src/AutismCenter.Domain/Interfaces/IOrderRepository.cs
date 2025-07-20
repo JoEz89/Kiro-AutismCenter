@@ -17,5 +17,6 @@ public interface IOrderRepository
     Task DeleteAsync(Order order, CancellationToken cancellationToken = default);
     Task<bool> ExistsAsync(Guid id, CancellationToken cancellationToken = default);
     Task<bool> OrderNumberExistsAsync(string orderNumber, CancellationToken cancellationToken = default);
+    Task<bool> HasProductBeenOrderedAsync(Guid productId, CancellationToken cancellationToken = default);
     Task<string> GenerateOrderNumberAsync(CancellationToken cancellationToken = default);
 }

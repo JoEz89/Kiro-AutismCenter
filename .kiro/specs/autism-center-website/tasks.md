@@ -101,14 +101,22 @@
 
   - [ ] 5.2 Build product management system
 
+
+
+
+
     - Implement product commands (CreateProduct, UpdateProduct, DeleteProduct)
     - Create product queries (GetProducts, GetProductById, SearchProducts)
     - Build product filtering and pagination logic
     - Implement inventory management commands
     - Write unit tests for product handlers
     - _Requirements: 2.1, 2.6, 2.9, 6.1_
+-
+
+
 
   - [ ] 5.3 Create shopping cart functionality
+
     - Implement cart commands (AddToCart, UpdateCartItem, RemoveFromCart)
     - Create cart queries (GetCart, GetCartItemCount)
     - Build cart persistence and session management
