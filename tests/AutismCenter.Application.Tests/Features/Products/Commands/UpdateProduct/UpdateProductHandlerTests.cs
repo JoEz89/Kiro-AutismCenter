@@ -52,6 +52,10 @@ public class UpdateProductHandlerTests
         _productRepositoryMock.Setup(x => x.GetByIdAsync(productId, It.IsAny<CancellationToken>()))
             .ReturnsAsync(existingProduct);
 
+        // Setup the second call after update
+        _productRepositoryMock.Setup(x => x.GetByIdAsync(existingProduct.Id, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(existingProduct);
+
         // Act
         var result = await _handler.Handle(command, CancellationToken.None);
 
@@ -129,6 +133,10 @@ public class UpdateProductHandlerTests
         _productRepositoryMock.Setup(x => x.GetByIdAsync(productId, It.IsAny<CancellationToken>()))
             .ReturnsAsync(existingProduct);
 
+        // Setup the second call after update
+        _productRepositoryMock.Setup(x => x.GetByIdAsync(existingProduct.Id, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(existingProduct);
+
         // Act
         var result = await _handler.Handle(command, CancellationToken.None);
 
@@ -169,6 +177,10 @@ public class UpdateProductHandlerTests
         );
 
         _productRepositoryMock.Setup(x => x.GetByIdAsync(productId, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(existingProduct);
+
+        // Setup the second call after update
+        _productRepositoryMock.Setup(x => x.GetByIdAsync(existingProduct.Id, It.IsAny<CancellationToken>()))
             .ReturnsAsync(existingProduct);
 
         // Act
@@ -212,6 +224,10 @@ public class UpdateProductHandlerTests
         );
 
         _productRepositoryMock.Setup(x => x.GetByIdAsync(productId, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(existingProduct);
+
+        // Setup the second call after update
+        _productRepositoryMock.Setup(x => x.GetByIdAsync(existingProduct.Id, It.IsAny<CancellationToken>()))
             .ReturnsAsync(existingProduct);
 
         // Act

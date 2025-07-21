@@ -87,10 +87,9 @@
     - Write integration tests for password reset flow
     - _Requirements: 4.6_
 
-- [-] 5. Application Layer - Commands and Queries
+- [x] 5. Application Layer - Commands and Queries
 
   - [x] 5.1 Implement user management commands and queries
-
 
     - Create user-related commands (CreateUser, UpdateUser, ChangePassword)
     - Implement user queries (GetUser, GetUserProfile)
@@ -99,11 +98,7 @@
     - Write unit tests for all handlers
     - _Requirements: 4.1, 4.5, 4.8, 6.9_
 
-  - [ ] 5.2 Build product management system
-
-
-
-
+  - [x] 5.2 Build product management system
 
     - Implement product commands (CreateProduct, UpdateProduct, DeleteProduct)
     - Create product queries (GetProducts, GetProductById, SearchProducts)
@@ -111,11 +106,8 @@
     - Implement inventory management commands
     - Write unit tests for product handlers
     - _Requirements: 2.1, 2.6, 2.9, 6.1_
--
 
-
-
-  - [ ] 5.3 Create shopping cart functionality
+- - [x] 5.3 Create shopping cart functionality
 
     - Implement cart commands (AddToCart, UpdateCartItem, RemoveFromCart)
     - Create cart queries (GetCart, GetCartItemCount)
