@@ -116,9 +116,15 @@
     - Write unit tests for cart operations
     - _Requirements: 2.2, 2.8_
 
-- [ ] 6. E-commerce Order Processing System
+- [-] 6. E-commerce Order Processing System
+
+
 
   - [ ] 6.1 Implement order creation and management
+
+
+
+
 
     - Create order commands (CreateOrder, UpdateOrderStatus, CancelOrder)
     - Implement order queries (GetOrders, GetOrderById, GetOrderHistory)
