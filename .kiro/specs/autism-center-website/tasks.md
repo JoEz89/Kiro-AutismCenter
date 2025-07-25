@@ -116,7 +116,12 @@
     - Write unit tests for cart operations
     - _Requirements: 2.2, 2.8_
 
-- [-] 6. E-commerce Order Processing System
+- [x] 6. E-commerce Order Processing System
+
+
+
+
+
 
   - [x] 6.1 Implement order creation and management
 
@@ -140,7 +145,11 @@
 
 - [ ] 7. Course Management System
 
+
+
   - [ ] 7.1 Build course catalog and enrollment system
+
+
 
     - Implement course commands (CreateCourse, UpdateCourse, EnrollUser)
     - Create course queries (GetCourses, GetCourseById, GetUserEnrollments)
