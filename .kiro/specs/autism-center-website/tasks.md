@@ -118,8 +118,6 @@
 
 - [-] 6. E-commerce Order Processing System
 
-
-
   - [x] 6.1 Implement order creation and management
 
     - Create order commands (CreateOrder, UpdateOrderStatus, CancelOrder)
@@ -130,7 +128,8 @@
     - Write unit tests for order processing
     - _Requirements: 2.3, 2.4, 2.5, 2.10, 6.2_
 
-  - [-] 6.2 Integrate payment processing with Stripe
+  - [x] 6.2 Integrate payment processing with Stripe
+
 
     - Set up Stripe payment service and webhook handling
     - Implement payment commands (ProcessPayment, RefundPayment)

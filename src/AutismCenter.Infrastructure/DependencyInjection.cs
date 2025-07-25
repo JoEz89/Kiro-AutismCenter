@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using AutismCenter.Application.Common.Interfaces;
 using AutismCenter.Application.Common.Settings;
 using AutismCenter.Domain.Interfaces;
@@ -47,7 +48,10 @@ public static class DependencyInjection
         services.AddScoped<IGoogleAuthService, GoogleAuthService>();
 
         // Payment Services
-        services.Configure<StripeSettings>(configuration.GetSection(StripeSettings.SectionName));
+        services.Configure<StripeSettings>(options =>
+        {
+            configuration.GetSection(StripeSettings.SectionName).Bind(options);
+        });
         services.AddScoped<IPaymentService, StripePaymentService>();
         services.AddScoped<IStripeWebhookService, StripeWebhookService>();
 

@@ -1,3 +1,4 @@
+using AutismCenter.Application.Common.Interfaces;
 using AutismCenter.Application.Common.Settings;
 using AutismCenter.Domain.Interfaces;
 using Microsoft.Extensions.Logging;
@@ -44,19 +45,19 @@ public class StripeWebhookService : IStripeWebhookService
 
             switch (stripeEvent.Type)
             {
-                case Events.PaymentIntentSucceeded:
+                case "payment_intent.succeeded":
                     await HandlePaymentIntentSucceeded(stripeEvent, cancellationToken);
                     break;
 
-                case Events.PaymentIntentPaymentFailed:
+                case "payment_intent.payment_failed":
                     await HandlePaymentIntentFailed(stripeEvent, cancellationToken);
                     break;
 
-                case Events.PaymentIntentCanceled:
+                case "payment_intent.canceled":
                     await HandlePaymentIntentCanceled(stripeEvent, cancellationToken);
                     break;
 
-                case Events.ChargeDisputeCreated:
+                case "charge.dispute.created":
                     await HandleChargeDispute(stripeEvent, cancellationToken);
                     break;
 

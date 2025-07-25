@@ -9,6 +9,8 @@
 
   <ItemGroup>
     <PackageReference Include="coverlet.collector" Version="6.0.2" />
+    <PackageReference Include="FluentAssertions" Version="8.5.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="9.0.7" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.10" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
     <PackageReference Include="Moq" Version="4.20.70" />
@@ -22,6 +24,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\AutismCenter.Infrastructure\AutismCenter.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\src\AutismCenter.WebApi\AutismCenter.WebApi.csproj" />
   </ItemGroup>
 
 </Project>

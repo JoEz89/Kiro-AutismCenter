@@ -206,9 +206,9 @@ public class UpdateOrderStatusHandlerTests
         // Assert
         result.Should().NotBeNull();
         result.Status.Should().Be(OrderStatus.Refunded);
-        result.PaymentStatus.Should().Be(PaymentStatus.Refunded);
+        result.PaymentStatus.Should().Be(AutismCenter.Domain.Enums.PaymentStatus.Refunded);
         order.Status.Should().Be(OrderStatus.Refunded);
-        order.PaymentStatus.Should().Be(PaymentStatus.Refunded);
+        order.PaymentStatus.Should().Be(AutismCenter.Domain.Enums.PaymentStatus.Refunded);
 
         _orderRepositoryMock.Verify(x => x.UpdateAsync(order, It.IsAny<CancellationToken>()), Times.Once);
         _unitOfWorkMock.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);

@@ -43,8 +43,8 @@ public class RefundPaymentHandlerTests
         var refundId = "re_test_123";
         var refundAmount = Money.Create(50.00m, "BHD");
 
-        var shippingAddress = Address.Create("123 Main St", "Test City", "12345", "Test Country");
-        var billingAddress = Address.Create("123 Main St", "Test City", "12345", "Test Country");
+        var shippingAddress = Address.Create("123 Main St", "Test City", "Test State", "12345", "Test Country");
+        var billingAddress = Address.Create("123 Main St", "Test City", "Test State", "12345", "Test Country");
         var order = Order.Create(Guid.NewGuid(), shippingAddress, billingAddress, "ORD-2024-123456");
         order.MarkPaymentCompleted(paymentId);
 
@@ -103,8 +103,8 @@ public class RefundPaymentHandlerTests
         // Arrange
         var orderId = Guid.NewGuid();
 
-        var shippingAddress = Address.Create("123 Main St", "Test City", "12345", "Test Country");
-        var billingAddress = Address.Create("123 Main St", "Test City", "12345", "Test Country");
+        var shippingAddress = Address.Create("123 Main St", "Test City", "Test State", "12345", "Test Country");
+        var billingAddress = Address.Create("123 Main St", "Test City", "Test State", "12345", "Test Country");
         var order = Order.Create(Guid.NewGuid(), shippingAddress, billingAddress, "ORD-2024-123456");
         // Order payment status remains Pending
 
@@ -134,8 +134,8 @@ public class RefundPaymentHandlerTests
         var paymentId = "pi_test_123";
         var errorMessage = "Refund failed";
 
-        var shippingAddress = Address.Create("123 Main St", "Test City", "12345", "Test Country");
-        var billingAddress = Address.Create("123 Main St", "Test City", "12345", "Test Country");
+        var shippingAddress = Address.Create("123 Main St", "Test City", "Test State", "12345", "Test Country");
+        var billingAddress = Address.Create("123 Main St", "Test City", "Test State", "12345", "Test Country");
         var order = Order.Create(Guid.NewGuid(), shippingAddress, billingAddress, "ORD-2024-123456");
         order.MarkPaymentCompleted(paymentId);
 

@@ -47,21 +47,21 @@ public class StripePaymentService : IPaymentService
 
             return paymentIntent.Status switch
             {
-                "succeeded" => new PaymentResult(true, paymentIntent.Id, null, Application.Common.Models.PaymentStatus.Succeeded),
-                "requires_action" => new PaymentResult(false, paymentIntent.Id, "Payment requires additional action", Application.Common.Models.PaymentStatus.RequiresAction),
-                "requires_payment_method" => new PaymentResult(false, paymentIntent.Id, "Payment method failed", Application.Common.Models.PaymentStatus.RequiresPaymentMethod),
-                _ => new PaymentResult(false, paymentIntent.Id, $"Payment failed with status: {paymentIntent.Status}", Application.Common.Models.PaymentStatus.Failed)
+                "succeeded" => new PaymentResult(true, paymentIntent.Id, null, AutismCenter.Application.Common.Interfaces.PaymentStatus.Succeeded),
+                "requires_action" => new PaymentResult(false, paymentIntent.Id, "Payment requires additional action", AutismCenter.Application.Common.Interfaces.PaymentStatus.RequiresAction),
+                "requires_payment_method" => new PaymentResult(false, paymentIntent.Id, "Payment method failed", AutismCenter.Application.Common.Interfaces.PaymentStatus.RequiresPaymentMethod),
+                _ => new PaymentResult(false, paymentIntent.Id, $"Payment failed with status: {paymentIntent.Status}", AutismCenter.Application.Common.Interfaces.PaymentStatus.Failed)
             };
         }
         catch (StripeException ex)
         {
             _logger.LogError(ex, "Stripe error processing payment: {ErrorMessage}", ex.Message);
-            return new PaymentResult(false, null, ex.Message, Application.Common.Models.PaymentStatus.Failed);
+            return new PaymentResult(false, null, ex.Message, AutismCenter.Application.Common.Interfaces.PaymentStatus.Failed);
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Unexpected error processing payment");
-            return new PaymentResult(false, null, "An unexpected error occurred", Application.Common.Models.PaymentStatus.Failed);
+            return new PaymentResult(false, null, "An unexpected error occurred", AutismCenter.Application.Common.Interfaces.PaymentStatus.Failed);
         }
     }
 
@@ -80,7 +80,7 @@ public class StripePaymentService : IPaymentService
 
             if (refund.Status == "succeeded")
             {
-                var refundedAmount = Money.Create(ConvertFromStripeAmount(refund.Amount ?? 0), amount.Currency);
+                var refundedAmount = Money.Create(ConvertFromStripeAmount(refund.Amount), amount.Currency);
                 return new RefundResult(true, refund.Id, null, refundedAmount);
             }
             else
@@ -100,7 +100,7 @@ public class StripePaymentService : IPaymentService
         }
     }
 
-    public async Task<Application.Common.Models.PaymentStatus> GetPaymentStatusAsync(string paymentId, CancellationToken cancellationToken = default)
+    public async Task<AutismCenter.Application.Common.Interfaces.PaymentStatus> GetPaymentStatusAsync(string paymentId, CancellationToken cancellationToken = default)
     {
         try
         {
@@ -108,23 +108,23 @@ public class StripePaymentService : IPaymentService
 
             return paymentIntent.Status switch
             {
-                "succeeded" => Application.Common.Models.PaymentStatus.Succeeded,
-                "requires_action" => Application.Common.Models.PaymentStatus.RequiresAction,
-                "requires_payment_method" => Application.Common.Models.PaymentStatus.RequiresPaymentMethod,
-                "canceled" => Application.Common.Models.PaymentStatus.Canceled,
-                "processing" => Application.Common.Models.PaymentStatus.Pending,
-                _ => Application.Common.Models.PaymentStatus.Failed
+                "succeeded" => AutismCenter.Application.Common.Interfaces.PaymentStatus.Succeeded,
+                "requires_action" => AutismCenter.Application.Common.Interfaces.PaymentStatus.RequiresAction,
+                "requires_payment_method" => AutismCenter.Application.Common.Interfaces.PaymentStatus.RequiresPaymentMethod,
+                "canceled" => AutismCenter.Application.Common.Interfaces.PaymentStatus.Canceled,
+                "processing" => AutismCenter.Application.Common.Interfaces.PaymentStatus.Pending,
+                _ => AutismCenter.Application.Common.Interfaces.PaymentStatus.Failed
             };
         }
         catch (StripeException ex)
         {
             _logger.LogError(ex, "Stripe error getting payment status: {ErrorMessage}", ex.Message);
-            return Application.Common.Models.PaymentStatus.Failed;
+            return AutismCenter.Application.Common.Interfaces.PaymentStatus.Failed;
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Unexpected error getting payment status");
-            return Application.Common.Models.PaymentStatus.Failed;
+            return AutismCenter.Application.Common.Interfaces.PaymentStatus.Failed;
         }
     }
 

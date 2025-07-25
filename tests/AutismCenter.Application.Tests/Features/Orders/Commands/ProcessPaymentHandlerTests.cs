@@ -42,8 +42,8 @@ public class ProcessPaymentHandlerTests
         var paymentMethodId = "pm_test_123";
         var paymentId = "pi_test_123";
 
-        var shippingAddress = Address.Create("123 Main St", "Test City", "12345", "Test Country");
-        var billingAddress = Address.Create("123 Main St", "Test City", "12345", "Test Country");
+        var shippingAddress = Address.Create("123 Main St", "Test City", "Test State", "12345", "Test Country");
+        var billingAddress = Address.Create("123 Main St", "Test City", "Test State", "12345", "Test Country");
         var order = Order.Create(Guid.NewGuid(), shippingAddress, billingAddress, "ORD-2024-123456");
 
         _orderRepositoryMock
@@ -52,7 +52,7 @@ public class ProcessPaymentHandlerTests
 
         _paymentServiceMock
             .Setup(x => x.ProcessPaymentAsync(It.IsAny<PaymentRequest>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(new PaymentResult(true, paymentId, null, Application.Common.Models.PaymentStatus.Succeeded));
+            .ReturnsAsync(new PaymentResult(true, paymentId, null, AutismCenter.Application.Common.Interfaces.PaymentStatus.Succeeded));
 
         var command = new ProcessPaymentCommand(orderId, paymentMethodId);
 
@@ -103,8 +103,8 @@ public class ProcessPaymentHandlerTests
         var paymentMethodId = "pm_test_123";
         var existingPaymentId = "pi_existing_123";
 
-        var shippingAddress = Address.Create("123 Main St", "Test City", "12345", "Test Country");
-        var billingAddress = Address.Create("123 Main St", "Test City", "12345", "Test Country");
+        var shippingAddress = Address.Create("123 Main St", "Test City", "Test State", "12345", "Test Country");
+        var billingAddress = Address.Create("123 Main St", "Test City", "Test State", "12345", "Test Country");
         var order = Order.Create(Guid.NewGuid(), shippingAddress, billingAddress, "ORD-2024-123456");
         order.MarkPaymentCompleted(existingPaymentId);
 
@@ -134,8 +134,8 @@ public class ProcessPaymentHandlerTests
         var paymentMethodId = "pm_test_123";
         var errorMessage = "Payment declined";
 
-        var shippingAddress = Address.Create("123 Main St", "Test City", "12345", "Test Country");
-        var billingAddress = Address.Create("123 Main St", "Test City", "12345", "Test Country");
+        var shippingAddress = Address.Create("123 Main St", "Test City", "Test State", "12345", "Test Country");
+        var billingAddress = Address.Create("123 Main St", "Test City", "Test State", "12345", "Test Country");
         var order = Order.Create(Guid.NewGuid(), shippingAddress, billingAddress, "ORD-2024-123456");
 
         _orderRepositoryMock
@@ -144,7 +144,7 @@ public class ProcessPaymentHandlerTests
 
         _paymentServiceMock
             .Setup(x => x.ProcessPaymentAsync(It.IsAny<PaymentRequest>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(new PaymentResult(false, null, errorMessage, Application.Common.Models.PaymentStatus.Failed));
+            .ReturnsAsync(new PaymentResult(false, null, errorMessage, AutismCenter.Application.Common.Interfaces.PaymentStatus.Failed));
 
         var command = new ProcessPaymentCommand(orderId, paymentMethodId);
 
