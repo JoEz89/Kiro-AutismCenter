@@ -3,20 +3,19 @@ using AutismCenter.Domain.Interfaces;
 using AutismCenter.Domain.Services;
 using AutismCenter.Domain.ValueObjects;
 using Moq;
+using Xunit;
 
 namespace AutismCenter.Domain.Tests.Services;
 
 public class OrderServiceTests
 {
-    private readonly Mock<IOrderRepository> _orderRepositoryMock;
     private readonly Mock<IProductRepository> _productRepositoryMock;
     private readonly OrderService _orderService;
 
     public OrderServiceTests()
     {
-        _orderRepositoryMock = new Mock<IOrderRepository>();
         _productRepositoryMock = new Mock<IProductRepository>();
-        _orderService = new OrderService(_orderRepositoryMock.Object, _productRepositoryMock.Object);
+        _orderService = new OrderService(_productRepositoryMock.Object);
     }
 
     [Fact]
@@ -29,23 +28,21 @@ public class OrderServiceTests
         var productId = Guid.NewGuid();
         var categoryId = Guid.NewGuid();
         var items = new List<(Guid ProductId, int Quantity)> { (productId, 2) };
+        var orderNumber = "ORD-2024-001";
 
         var product = Product.Create("Test Product", "منتج تجريبي", "Description", "وصف", 
             Money.Create(100, "BHD"), 10, categoryId, "PRD-001");
-
-        _orderRepositoryMock.Setup(x => x.GenerateOrderNumberAsync(It.IsAny<CancellationToken>()))
-            .ReturnsAsync("ORD-2024-001");
 
         _productRepositoryMock.Setup(x => x.GetByIdAsync(productId, It.IsAny<CancellationToken>()))
             .ReturnsAsync(product);
 
         // Act
-        var order = await _orderService.CreateOrderAsync(userId, shippingAddress, billingAddress, items);
+        var order = await _orderService.CreateOrderAsync(userId, shippingAddress, billingAddress, items, orderNumber);
 
         // Assert
         Assert.NotNull(order);
         Assert.Equal(userId, order.UserId);
-        Assert.Equal("ORD-2024-001", order.OrderNumber);
+        Assert.Equal(orderNumber, order.OrderNumber);
         Assert.Single(order.Items);
         Assert.Equal(2, order.Items.First().Quantity);
         Assert.Equal(Money.Create(200, "BHD"), order.TotalAmount);
@@ -61,20 +58,18 @@ public class OrderServiceTests
         var productId = Guid.NewGuid();
         var categoryId = Guid.NewGuid();
         var items = new List<(Guid ProductId, int Quantity)> { (productId, 2) };
+        var orderNumber = "ORD-2024-001";
 
         var product = Product.Create("Test Product", "منتج تجريبي", "Description", "وصف", 
             Money.Create(100, "BHD"), 10, categoryId, "PRD-001");
         product.Deactivate();
-
-        _orderRepositoryMock.Setup(x => x.GenerateOrderNumberAsync(It.IsAny<CancellationToken>()))
-            .ReturnsAsync("ORD-2024-001");
 
         _productRepositoryMock.Setup(x => x.GetByIdAsync(productId, It.IsAny<CancellationToken>()))
             .ReturnsAsync(product);
 
         // Act & Assert
         await Assert.ThrowsAsync<InvalidOperationException>(() => 
-            _orderService.CreateOrderAsync(userId, shippingAddress, billingAddress, items));
+            _orderService.CreateOrderAsync(userId, shippingAddress, billingAddress, items, orderNumber));
     }
 
     [Fact]
@@ -87,19 +82,17 @@ public class OrderServiceTests
         var productId = Guid.NewGuid();
         var categoryId = Guid.NewGuid();
         var items = new List<(Guid ProductId, int Quantity)> { (productId, 15) }; // More than available
+        var orderNumber = "ORD-2024-001";
 
         var product = Product.Create("Test Product", "منتج تجريبي", "Description", "وصف", 
             Money.Create(100, "BHD"), 10, categoryId, "PRD-001"); // Only 10 in stock
-
-        _orderRepositoryMock.Setup(x => x.GenerateOrderNumberAsync(It.IsAny<CancellationToken>()))
-            .ReturnsAsync("ORD-2024-001");
 
         _productRepositoryMock.Setup(x => x.GetByIdAsync(productId, It.IsAny<CancellationToken>()))
             .ReturnsAsync(product);
 
         // Act & Assert
         await Assert.ThrowsAsync<InvalidOperationException>(() => 
-            _orderService.CreateOrderAsync(userId, shippingAddress, billingAddress, items));
+            _orderService.CreateOrderAsync(userId, shippingAddress, billingAddress, items, orderNumber));
     }
 
     [Fact]

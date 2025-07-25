@@ -120,20 +120,18 @@
 
 
 
-  - [ ] 6.1 Implement order creation and management
-
-
-
-
+  - [x] 6.1 Implement order creation and management
 
     - Create order commands (CreateOrder, UpdateOrderStatus, CancelOrder)
     - Implement order queries (GetOrders, GetOrderById, GetOrderHistory)
     - Build order validation and inventory checking
+
     - Create unique order number generation service
     - Write unit tests for order processing
     - _Requirements: 2.3, 2.4, 2.5, 2.10, 6.2_
 
-  - [ ] 6.2 Integrate payment processing with Stripe
+  - [-] 6.2 Integrate payment processing with Stripe
+
     - Set up Stripe payment service and webhook handling
     - Implement payment commands (ProcessPayment, RefundPayment)
     - Create payment status tracking and order updates

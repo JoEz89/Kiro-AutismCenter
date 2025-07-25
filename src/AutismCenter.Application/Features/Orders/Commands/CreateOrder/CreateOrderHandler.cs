@@ -46,10 +46,10 @@ public class CreateOrderHandler : IRequestHandler<CreateOrderCommand, OrderDto>
                 throw new InvalidOperationException($"Product with ID {item.ProductId} not found");
 
             if (!product.IsActive)
-                throw new InvalidOperationException($"Product {product.Name} is not available");
+                throw new InvalidOperationException($"Product {product.GetName(false)} is not available");
 
             if (product.StockQuantity < item.Quantity)
-                throw new InvalidOperationException($"Insufficient stock for product {product.Name}. Available: {product.StockQuantity}, Requested: {item.Quantity}");
+                throw new InvalidOperationException($"Insufficient stock for product {product.GetName(false)}. Available: {product.StockQuantity}, Requested: {item.Quantity}");
 
             productValidations.Add((product, item.Quantity));
         }

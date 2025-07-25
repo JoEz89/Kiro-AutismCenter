@@ -6,20 +6,17 @@ namespace AutismCenter.Domain.Services;
 
 public class OrderService
 {
-    private readonly IOrderRepository _orderRepository;
     private readonly IProductRepository _productRepository;
 
-    public OrderService(IOrderRepository orderRepository, IProductRepository productRepository)
+    public OrderService(IProductRepository productRepository)
     {
-        _orderRepository = orderRepository;
         _productRepository = productRepository;
     }
 
     public async Task<Order> CreateOrderAsync(Guid userId, Address shippingAddress, Address billingAddress, 
-        List<(Guid ProductId, int Quantity)> items, CancellationToken cancellationToken = default)
+        List<(Guid ProductId, int Quantity)> items, string orderNumber, CancellationToken cancellationToken = default)
     {
-        // Generate unique order number
-        var orderNumber = await _orderRepository.GenerateOrderNumberAsync(cancellationToken);
+        // Order number should be provided by the application layer
         
         // Create order
         var order = Order.Create(userId, shippingAddress, billingAddress, orderNumber);

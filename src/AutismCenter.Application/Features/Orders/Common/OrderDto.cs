@@ -1,3 +1,4 @@
+using AutismCenter.Application.Features.Orders.Commands.CreateOrder;
 using AutismCenter.Domain.Entities;
 using AutismCenter.Domain.Enums;
 
@@ -72,7 +73,7 @@ public record OrderItemDto(
             orderItem.Id,
             orderItem.OrderId,
             orderItem.ProductId,
-            orderItem.Product?.Name ?? "Unknown Product",
+            orderItem.Product?.GetName(false) ?? "Unknown Product",
             orderItem.Quantity,
             orderItem.UnitPrice.Amount,
             orderItem.UnitPrice.Currency,

@@ -51,11 +51,14 @@ public class CreateOrderHandlerTests
 
         var product = Product.Create(
             "Test Product",
+            "منتج تجريبي",
             "Test Description",
+            "وصف تجريبي",
             Money.Create(100, "BHD"),
-            Guid.NewGuid()
+            10,
+            Guid.NewGuid(),
+            "PRD-001"
         );
-        product.UpdateStock(10);
 
         var command = new CreateOrderCommand(
             userId,
@@ -160,11 +163,14 @@ public class CreateOrderHandlerTests
 
         var product = Product.Create(
             "Test Product",
+            "منتج تجريبي",
             "Test Description",
+            "وصف تجريبي",
             Money.Create(100, "BHD"),
-            Guid.NewGuid()
+            1, // Only 1 in stock
+            Guid.NewGuid(),
+            "PRD-001"
         );
-        product.UpdateStock(1); // Only 1 in stock
 
         var command = new CreateOrderCommand(
             userId,
@@ -182,6 +188,9 @@ public class CreateOrderHandlerTests
         // Act & Assert
         await _handler.Invoking(x => x.Handle(command, CancellationToken.None))
             .Should().ThrowAsync<InvalidOperationException>()
-            .WithMessage($"Insufficient stock for product {product.Name}. Available: 1, Requested: 5");
+            .WithMessage($"Insufficient stock for product {product.GetName(false)}. Available: 1, Requested: 5");
     }
 }
+
+
+
