@@ -147,7 +147,12 @@
 
 
 
-  - [ ] 7.1 Build course catalog and enrollment system
+
+
+  - [x] 7.1 Build course catalog and enrollment system
+
+
+
 
 
 
