@@ -196,9 +196,14 @@
     - Write unit tests for appointment management
     - _Requirements: 5.1, 5.4, 5.5, 5.6, 5.9, 5.10_
 
-- [ ] 9. Admin Dashboard Backend Services
+- [-] 9. Admin Dashboard Backend Services
+
+
+
 
   - [ ] 9.1 Implement inventory and product management APIs
+
+
 
     - Create admin product management commands with validation
     - Build inventory tracking and stock management

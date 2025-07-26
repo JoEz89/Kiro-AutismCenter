@@ -39,4 +39,5 @@ public interface IProductRepository
     Task DeleteAsync(Product product, CancellationToken cancellationToken = default);
     Task<bool> ExistsAsync(Guid id, CancellationToken cancellationToken = default);
     Task<bool> SkuExistsAsync(string sku, CancellationToken cancellationToken = default);
+    Task<IEnumerable<Product>> GetAllWithCategoriesAsync(CancellationToken cancellationToken = default);
 }
