@@ -163,7 +163,10 @@
     - Write unit tests for course management
     - _Requirements: 3.1, 3.3, 3.4, 3.5_
 
-  - [ ] 7.2 Implement secure video streaming
+  - [-] 7.2 Implement secure video streaming
+
+
+
 
     - Set up video hosting service integration (AWS S3 or Vimeo)
     - Create secure video URL generation with signed URLs

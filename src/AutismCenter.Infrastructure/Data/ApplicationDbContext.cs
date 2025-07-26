@@ -28,6 +28,8 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     public DbSet<Appointment> Appointments => Set<Appointment>();
     public DbSet<Doctor> Doctors => Set<Doctor>();
     public DbSet<DoctorAvailability> DoctorAvailabilities => Set<DoctorAvailability>();
+    public DbSet<VideoStreamingSession> VideoStreamingSessions => Set<VideoStreamingSession>();
+    public DbSet<VideoAccessLog> VideoAccessLogs => Set<VideoAccessLog>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

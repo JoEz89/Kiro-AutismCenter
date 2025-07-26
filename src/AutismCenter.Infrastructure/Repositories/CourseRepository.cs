@@ -65,4 +65,11 @@ public class CourseRepository : BaseRepository<Course>, ICourseRepository
             .OrderBy(c => c.TitleEn)
             .ToListAsync(cancellationToken);
     }
+
+    public async Task<CourseModule?> GetModuleByIdAsync(Guid moduleId, CancellationToken cancellationToken = default)
+    {
+        return await Context.CourseModules
+            .Include(m => m.Course)
+            .FirstOrDefaultAsync(m => m.Id == moduleId, cancellationToken);
+    }
 }

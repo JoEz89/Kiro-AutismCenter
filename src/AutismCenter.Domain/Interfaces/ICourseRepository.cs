@@ -14,4 +14,5 @@ public interface ICourseRepository
     Task DeleteAsync(Course course, CancellationToken cancellationToken = default);
     Task<bool> ExistsAsync(Guid id, CancellationToken cancellationToken = default);
     Task<bool> CodeExistsAsync(string courseCode, CancellationToken cancellationToken = default);
+    Task<CourseModule?> GetModuleByIdAsync(Guid moduleId, CancellationToken cancellationToken = default);
 }

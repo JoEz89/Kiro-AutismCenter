@@ -17,6 +17,8 @@ public interface IApplicationDbContext
     DbSet<Appointment> Appointments { get; }
     DbSet<Doctor> Doctors { get; }
     DbSet<DoctorAvailability> DoctorAvailabilities { get; }
+    DbSet<VideoStreamingSession> VideoStreamingSessions { get; }
+    DbSet<VideoAccessLog> VideoAccessLogs { get; }
     
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }

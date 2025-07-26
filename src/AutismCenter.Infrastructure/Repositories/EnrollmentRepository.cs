@@ -100,4 +100,18 @@ public class EnrollmentRepository : BaseRepository<Enrollment>, IEnrollmentRepos
             .OrderByDescending(e => e.EnrollmentDate)
             .ToListAsync(cancellationToken);
     }
+
+    public async Task<Enrollment?> GetActiveEnrollmentAsync(Guid userId, Guid courseId, CancellationToken cancellationToken = default)
+    {
+        var now = DateTime.UtcNow;
+        return await DbSet
+            .Include(e => e.User)
+            .Include(e => e.Course)
+                .ThenInclude(c => c.Modules.Where(m => m.IsActive))
+            .Include(e => e.ModuleProgressList)
+            .FirstOrDefaultAsync(e => e.UserId == userId && 
+                               e.CourseId == courseId && 
+                               e.IsActive && 
+                               e.ExpiryDate > now, cancellationToken);
+    }
 }

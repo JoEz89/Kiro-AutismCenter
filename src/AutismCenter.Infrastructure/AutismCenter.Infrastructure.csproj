@@ -20,6 +20,8 @@
     <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.0.2" />
     <PackageReference Include="Google.Apis.Auth" Version="1.68.0" />
     <PackageReference Include="Stripe.net" Version="45.17.0" />
+    <PackageReference Include="AWSSDK.S3" Version="3.7.402.10" />
+    <PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="3.7.301" />
   </ItemGroup>
 
   <ItemGroup>

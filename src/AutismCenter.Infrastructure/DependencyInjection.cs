@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using Amazon.S3;
 using AutismCenter.Application.Common.Interfaces;
 using AutismCenter.Application.Common.Settings;
 using AutismCenter.Domain.Interfaces;
@@ -37,6 +38,8 @@ public static class DependencyInjection
         services.AddScoped<IEnrollmentRepository, EnrollmentRepository>();
         services.AddScoped<IAppointmentRepository, AppointmentRepository>();
         services.AddScoped<IDoctorRepository, DoctorRepository>();
+        services.AddScoped<IVideoStreamingSessionRepository, VideoStreamingSessionRepository>();
+        services.AddScoped<IVideoAccessLogRepository, VideoAccessLogRepository>();
 
         // Authentication Services
         services.AddScoped<ITokenService, TokenService>();
@@ -54,6 +57,13 @@ public static class DependencyInjection
         });
         services.AddScoped<IPaymentService, StripePaymentService>();
         services.AddScoped<IStripeWebhookService, StripeWebhookService>();
+
+        // AWS S3 Service
+        services.AddAWSService<IAmazonS3>();
+
+        // Video Streaming Services
+        services.AddScoped<IVideoAccessService, VideoAccessService>();
+        services.AddScoped<IVideoStreamingService, AwsS3VideoStreamingService>();
 
         return services;
     }

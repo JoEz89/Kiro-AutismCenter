@@ -17,4 +17,5 @@ public interface IEnrollmentRepository
     Task DeleteAsync(Enrollment enrollment, CancellationToken cancellationToken = default);
     Task<bool> ExistsAsync(Guid id, CancellationToken cancellationToken = default);
     Task<bool> UserEnrolledInCourseAsync(Guid userId, Guid courseId, CancellationToken cancellationToken = default);
+    Task<Enrollment?> GetActiveEnrollmentAsync(Guid userId, Guid courseId, CancellationToken cancellationToken = default);
 }
