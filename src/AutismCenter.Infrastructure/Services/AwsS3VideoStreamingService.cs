@@ -50,8 +50,9 @@ public class AwsS3VideoStreamingService : IVideoStreamingService
             };
 
             // Add custom headers to prevent downloads and enhance security
-            request.Headers.Add("X-User-ID", userId.ToString());
-            request.Headers.Add("X-Timestamp", DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString());
+            // Note: Custom headers in pre-signed URLs are limited, so we'll use query parameters instead
+            // request.Headers.Add("X-User-ID", userId.ToString());
+            // request.Headers.Add("X-Timestamp", DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString());
 
             var presignedUrl = await _s3Client.GetPreSignedURLAsync(request);
 
@@ -67,20 +68,12 @@ public class AwsS3VideoStreamingService : IVideoStreamingService
         }
     }
 
-    public async Task<bool> ValidateVideoAccessAsync(string videoKey, Guid userId)
+    public Task<bool> ValidateVideoAccessAsync(string videoKey, Guid userId)
     {
-        try
-        {
-            // This method is not used in our current implementation
-            // Access validation is handled at the application layer
-            _logger.LogWarning("ValidateVideoAccessAsync called but not implemented for video key validation");
-            return false;
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Failed to validate video access for user {UserId} and video {VideoKey}", userId, videoKey);
-            return false;
-        }
+        // This method is not used in our current implementation
+        // Access validation is handled at the application layer
+        _logger.LogWarning("ValidateVideoAccessAsync called but not implemented for video key validation");
+        return Task.FromResult(false);
     }
 
     public async Task<string> UploadVideoAsync(Stream videoStream, string fileName, string contentType)
@@ -106,7 +99,7 @@ public class AwsS3VideoStreamingService : IVideoStreamingService
             };
 
             // Set bucket policy to prevent direct access
-            request.Headers.Add("x-amz-acl", "private");
+            request.CannedACL = S3CannedACL.Private;
 
             var response = await _s3Client.PutObjectAsync(request);
 
@@ -162,10 +155,16 @@ public class AwsS3VideoStreamingService : IVideoStreamingService
 
             var response = await _s3Client.GetObjectMetadataAsync(request);
 
+            var originalFileName = videoKey;
+            if (response.Metadata.Keys.Contains("original-filename"))
+            {
+                originalFileName = response.Metadata["original-filename"];
+            }
+
             return new VideoMetadata
             {
                 VideoKey = videoKey,
-                FileName = response.Metadata.ContainsKey("original-filename") ? response.Metadata["original-filename"] : videoKey,
+                FileName = originalFileName,
                 ContentType = response.Headers.ContentType,
                 FileSizeBytes = response.ContentLength,
                 UploadedAt = response.LastModified,

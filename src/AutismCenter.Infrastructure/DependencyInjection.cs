@@ -65,6 +65,9 @@ public static class DependencyInjection
         services.AddScoped<IVideoAccessService, VideoAccessService>();
         services.AddScoped<IVideoStreamingService, AwsS3VideoStreamingService>();
 
+        // Certificate Services
+        services.AddScoped<ICertificateService, CertificateService>();
+
         return services;
     }
 }

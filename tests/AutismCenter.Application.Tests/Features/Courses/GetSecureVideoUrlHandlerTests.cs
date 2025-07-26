@@ -3,6 +3,7 @@ using Moq;
 using AutismCenter.Application.Features.Courses.Queries.GetSecureVideoUrl;
 using AutismCenter.Domain.Entities;
 using AutismCenter.Domain.Interfaces;
+using AutismCenter.Domain.ValueObjects;
 using Xunit;
 
 namespace AutismCenter.Application.Tests.Features.Courses;

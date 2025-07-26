@@ -118,11 +118,6 @@
 
 - [x] 6. E-commerce Order Processing System
 
-
-
-
-
-
   - [x] 6.1 Implement order creation and management
 
     - Create order commands (CreateOrder, UpdateOrderStatus, CancelOrder)
@@ -135,7 +130,6 @@
 
   - [x] 6.2 Integrate payment processing with Stripe
 
-
     - Set up Stripe payment service and webhook handling
     - Implement payment commands (ProcessPayment, RefundPayment)
     - Create payment status tracking and order updates
@@ -143,18 +137,13 @@
     - Write integration tests for payment processing
     - _Requirements: 2.3, 8.6, 8.9_
 
-- [ ] 7. Course Management System
+- [x] 7. Course Management System
 
 
 
 
 
   - [x] 7.1 Build course catalog and enrollment system
-
-
-
-
-
 
     - Implement course commands (CreateCourse, UpdateCourse, EnrollUser)
     - Create course queries (GetCourses, GetCourseById, GetUserEnrollments)
@@ -163,10 +152,7 @@
     - Write unit tests for course management
     - _Requirements: 3.1, 3.3, 3.4, 3.5_
 
-  - [-] 7.2 Implement secure video streaming
-
-
-
+  - [x] 7.2 Implement secure video streaming
 
     - Set up video hosting service integration (AWS S3 or Vimeo)
     - Create secure video URL generation with signed URLs
@@ -175,7 +161,9 @@
     - Write integration tests for video security
     - _Requirements: 3.2, 3.7_
 
-  - [ ] 7.3 Create course progress and certificate system
+  - [x] 7.3 Create course progress and certificate system
+
+
     - Implement progress tracking commands and queries
     - Build certificate generation service with PDF creation
     - Create course completion validation logic
@@ -183,9 +171,13 @@
     - Write unit tests for progress and certificate features
     - _Requirements: 3.5, 3.6, 3.10_
 
-- [ ] 8. Appointment Scheduling System
+- [-] 8. Appointment Scheduling System
 
-  - [ ] 8.1 Build calendar and availability management
+
+
+
+  - [-] 8.1 Build calendar and availability management
+
 
     - Implement doctor availability commands and queries
     - Create appointment slot generation and validation

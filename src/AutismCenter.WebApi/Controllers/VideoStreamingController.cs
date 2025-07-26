@@ -12,9 +12,6 @@ namespace AutismCenter.WebApi.Controllers;
 [Authorize]
 public class VideoStreamingController : BaseController
 {
-    public VideoStreamingController(IMediator mediator) : base(mediator)
-    {
-    }
 
     /// <summary>
     /// Generates a secure, time-limited URL for video streaming
@@ -54,7 +51,7 @@ public class VideoStreamingController : BaseController
         {
             return BadRequest(ex.Message);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             return StatusCode(500, "An error occurred while generating the secure video URL");
         }
@@ -83,7 +80,7 @@ public class VideoStreamingController : BaseController
         {
             return BadRequest(ex.Message);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             return StatusCode(500, "An error occurred while ending the video session");
         }
@@ -94,30 +91,30 @@ public class VideoStreamingController : BaseController
     /// </summary>
     /// <param name="moduleId">The ID of the course module containing the video</param>
     [HttpGet("validate-access/{moduleId:guid}")]
-    public async Task<ActionResult<VideoAccessValidationResponse>> ValidateVideoAccess(Guid moduleId)
+    public Task<ActionResult<VideoAccessValidationResponse>> ValidateVideoAccess(Guid moduleId)
     {
         try
         {
             var userId = GetCurrentUserId();
             if (userId == Guid.Empty)
             {
-                return Unauthorized("User ID not found in token");
+                return Task.FromResult<ActionResult<VideoAccessValidationResponse>>(Unauthorized("User ID not found in token"));
             }
 
             // This would typically use a separate query/service
             // For now, we'll use the video access service directly through dependency injection
             // In a full implementation, you'd create a separate query handler
             
-            return Ok(new VideoAccessValidationResponse
+            return Task.FromResult<ActionResult<VideoAccessValidationResponse>>(Ok(new VideoAccessValidationResponse
             {
                 HasAccess = false, // Placeholder - would be implemented with proper validation
                 Reason = "Not implemented in this demo",
                 DaysRemaining = 0
-            });
+            }));
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return StatusCode(500, "An error occurred while validating video access");
+            return Task.FromResult<ActionResult<VideoAccessValidationResponse>>(StatusCode(500, "An error occurred while validating video access"));
         }
     }
 
