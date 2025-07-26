@@ -143,6 +143,13 @@ public class Appointment : BaseEntity
         AddDomainEvent(new AppointmentZoomMeetingCreatedEvent(Id, meetingId, joinUrl));
     }
 
+    public void ClearZoomMeeting()
+    {
+        ZoomMeetingId = null;
+        ZoomJoinUrl = null;
+        UpdateTimestamp();
+    }
+
     public void UpdatePatientInfo(PatientInfo newPatientInfo)
     {
         PatientInfo = newPatientInfo;

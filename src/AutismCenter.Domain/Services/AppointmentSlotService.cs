@@ -3,7 +3,7 @@ using AutismCenter.Domain.Interfaces;
 
 namespace AutismCenter.Domain.Services;
 
-public class AppointmentSlotService
+public class AppointmentSlotService : IAppointmentSlotService
 {
     private readonly IAppointmentRepository _appointmentRepository;
     private readonly IDoctorRepository _doctorRepository;

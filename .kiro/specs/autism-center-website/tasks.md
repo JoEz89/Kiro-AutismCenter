@@ -139,10 +139,6 @@
 
 - [x] 7. Course Management System
 
-
-
-
-
   - [x] 7.1 Build course catalog and enrollment system
 
     - Implement course commands (CreateCourse, UpdateCourse, EnrollUser)
@@ -163,7 +159,6 @@
 
   - [x] 7.3 Create course progress and certificate system
 
-
     - Implement progress tracking commands and queries
     - Build certificate generation service with PDF creation
     - Create course completion validation logic
@@ -171,13 +166,10 @@
     - Write unit tests for progress and certificate features
     - _Requirements: 3.5, 3.6, 3.10_
 
-- [-] 8. Appointment Scheduling System
+- [x] 8. Appointment Scheduling System
 
 
-
-
-  - [-] 8.1 Build calendar and availability management
-
+  - [x] 8.1 Build calendar and availability management
 
     - Implement doctor availability commands and queries
     - Create appointment slot generation and validation
@@ -186,7 +178,7 @@
     - Write unit tests for availability management
     - _Requirements: 5.1, 5.2, 5.7, 5.8_
 
-  - [ ] 8.2 Integrate Zoom API for video appointments
+  - [x] 8.2 Integrate Zoom API for video appointments
 
     - Set up Zoom API client and authentication
     - Implement meeting creation and link generation
@@ -195,7 +187,8 @@
     - Write integration tests for Zoom integration
     - _Requirements: 5.3, 5.4_
 
-  - [ ] 8.3 Create appointment booking and management
+  - [x] 8.3 Create appointment booking and management
+
     - Implement appointment commands (BookAppointment, CancelAppointment, RescheduleAppointment)
     - Create appointment queries (GetAppointments, GetAvailableSlots)
     - Build appointment notification and reminder system
