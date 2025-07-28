@@ -19,6 +19,8 @@ public interface IApplicationDbContext
     DbSet<DoctorAvailability> DoctorAvailabilities { get; }
     DbSet<VideoStreamingSession> VideoStreamingSessions { get; }
     DbSet<VideoAccessLog> VideoAccessLogs { get; }
+    DbSet<LocalizedContent> LocalizedContents { get; }
+    DbSet<EmailTemplate> EmailTemplates { get; }
     
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }

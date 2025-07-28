@@ -30,6 +30,8 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     public DbSet<DoctorAvailability> DoctorAvailabilities => Set<DoctorAvailability>();
     public DbSet<VideoStreamingSession> VideoStreamingSessions => Set<VideoStreamingSession>();
     public DbSet<VideoAccessLog> VideoAccessLogs => Set<VideoAccessLog>();
+    public DbSet<LocalizedContent> LocalizedContents => Set<LocalizedContent>();
+    public DbSet<EmailTemplate> EmailTemplates => Set<EmailTemplate>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

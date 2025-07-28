@@ -5,4 +5,5 @@ public interface IEmailService
     Task SendEmailVerificationAsync(string email, string firstName, string verificationToken, string language = "en");
     Task SendWelcomeEmailAsync(string email, string firstName, string language = "en");
     Task SendPasswordResetEmailAsync(string email, string firstName, string resetToken, string language = "en");
+    Task SendEmailAsync(string email, string subject, string body, CancellationToken cancellationToken = default);
 }

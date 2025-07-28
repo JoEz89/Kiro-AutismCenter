@@ -34,6 +34,20 @@ public class ProductRepository : BaseRepository<Product>, IProductRepository
             .ToListAsync(cancellationToken);
     }
 
+    public async Task<IEnumerable<Product>> GetByCategoryIdAsync(Guid categoryId, CancellationToken cancellationToken = default)
+    {
+        return await DbSet
+            .Include(p => p.Category)
+            .Where(p => p.CategoryId == categoryId)
+            .ToListAsync(cancellationToken);
+    }
+
+    public async Task<bool> HasProductsInCategoryAsync(Guid categoryId, CancellationToken cancellationToken = default)
+    {
+        return await DbSet
+            .AnyAsync(p => p.CategoryId == categoryId, cancellationToken);
+    }
+
     public async Task<IEnumerable<Product>> SearchAsync(string searchTerm, CancellationToken cancellationToken = default)
     {
         var lowerSearchTerm = searchTerm.ToLower();
@@ -196,6 +210,13 @@ public class ProductRepository : BaseRepository<Product>, IProductRepository
     }
 
     public override async Task<IEnumerable<Product>> GetAllAsync(CancellationToken cancellationToken = default)
+    {
+        return await DbSet
+            .Include(p => p.Category)
+            .ToListAsync(cancellationToken);
+    }
+
+    public async Task<IEnumerable<Product>> GetAllWithCategoriesAsync(CancellationToken cancellationToken = default)
     {
         return await DbSet
             .Include(p => p.Category)

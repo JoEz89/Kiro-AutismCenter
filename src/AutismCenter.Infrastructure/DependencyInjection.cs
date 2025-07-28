@@ -22,6 +22,9 @@ public static class DependencyInjection
 
         services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
 
+        // Memory Cache
+        services.AddMemoryCache();
+
         // Unit of Work
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 
@@ -40,6 +43,8 @@ public static class DependencyInjection
         services.AddScoped<IDoctorRepository, DoctorRepository>();
         services.AddScoped<IVideoStreamingSessionRepository, VideoStreamingSessionRepository>();
         services.AddScoped<IVideoAccessLogRepository, VideoAccessLogRepository>();
+        services.AddScoped<ILocalizedContentRepository, LocalizedContentRepository>();
+        services.AddScoped<IEmailTemplateRepository, EmailTemplateRepository>();
 
         // Authentication Services
         services.AddScoped<ITokenService, TokenService>();
@@ -67,6 +72,10 @@ public static class DependencyInjection
 
         // Certificate Services
         services.AddScoped<ICertificateService, CertificateService>();
+
+        // Localization Services
+        services.AddScoped<ILocalizationService, LocalizationService>();
+        services.AddScoped<IEmailTemplateService, EmailTemplateService>();
 
         return services;
     }

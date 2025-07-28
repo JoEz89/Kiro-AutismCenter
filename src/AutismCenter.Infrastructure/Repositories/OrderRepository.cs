@@ -76,6 +76,23 @@ public class OrderRepository : BaseRepository<Order>, IOrderRepository
             .AnyAsync(oi => oi.ProductId == productId, cancellationToken);
     }
 
+    public async Task<bool> HasOrdersForProductAsync(Guid productId, CancellationToken cancellationToken = default)
+    {
+        return await Context.Set<OrderItem>()
+            .AnyAsync(oi => oi.ProductId == productId, cancellationToken);
+    }
+
+    public async Task<IEnumerable<Order>> GetOrdersWithItemsByDateRangeAsync(DateTime startDate, DateTime endDate, CancellationToken cancellationToken = default)
+    {
+        return await DbSet
+            .Include(o => o.Items)
+                .ThenInclude(oi => oi.Product)
+            .Include(o => o.User)
+            .Where(o => o.CreatedAt >= startDate && o.CreatedAt <= endDate)
+            .OrderByDescending(o => o.CreatedAt)
+            .ToListAsync(cancellationToken);
+    }
+
     public async Task<string> GenerateOrderNumberAsync(CancellationToken cancellationToken = default)
     {
         var year = DateTime.UtcNow.Year;
