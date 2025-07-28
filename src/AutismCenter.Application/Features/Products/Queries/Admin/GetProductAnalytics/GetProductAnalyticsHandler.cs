@@ -88,7 +88,7 @@ public class GetProductAnalyticsHandler : IRequestHandler<GetProductAnalyticsQue
             .ToDictionary(g => g.Key, g => new
             {
                 TotalSold = g.Sum(oi => oi.Quantity),
-                Revenue = g.Sum(oi => oi.Price.Amount * oi.Quantity),
+                Revenue = g.Sum(oi => oi.UnitPrice.Amount * oi.Quantity),
                 LastSold = g.Max(oi => oi.Order.CreatedAt)
             });
 
@@ -138,7 +138,7 @@ public class GetProductAnalyticsHandler : IRequestHandler<GetProductAnalyticsQue
             .ToDictionary(g => g.Key, g => new
             {
                 TotalSold = g.Sum(oi => oi.Quantity),
-                Revenue = g.Sum(oi => oi.Price.Amount * oi.Quantity)
+                Revenue = g.Sum(oi => oi.UnitPrice.Amount * oi.Quantity)
             });
 
         return categories.Select(c =>

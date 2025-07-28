@@ -16,6 +16,7 @@ public class User : BaseEntity
     public bool IsEmailVerified { get; private set; }
     public string? GoogleId { get; private set; }
     public PhoneNumber? PhoneNumber { get; private set; }
+    public bool IsActive { get; private set; }
 
     // Navigation properties
     private readonly List<Order> _orders = new();
@@ -37,6 +38,7 @@ public class User : BaseEntity
         Role = role;
         PreferredLanguage = preferredLanguage;
         IsEmailVerified = false;
+        IsActive = true;
     }
 
     public static User Create(Email email, string firstName, string lastName, UserRole role = UserRole.Patient, Language preferredLanguage = Language.English)
@@ -147,5 +149,27 @@ public class User : BaseEntity
 
     public bool HasGoogleAccount() => !string.IsNullOrEmpty(GoogleId);
 
-    public bool CanLogin() => IsEmailVerified && (HasGoogleAccount() || !string.IsNullOrEmpty(PasswordHash));
+    public bool CanLogin() => IsActive && IsEmailVerified && (HasGoogleAccount() || !string.IsNullOrEmpty(PasswordHash));
+
+    public void Activate()
+    {
+        if (IsActive)
+            return;
+
+        IsActive = true;
+        UpdateTimestamp();
+        
+        AddDomainEvent(new UserActivatedEvent(Id, Email));
+    }
+
+    public void Deactivate()
+    {
+        if (!IsActive)
+            return;
+
+        IsActive = false;
+        UpdateTimestamp();
+        
+        AddDomainEvent(new UserDeactivatedEvent(Id, Email));
+    }
 }

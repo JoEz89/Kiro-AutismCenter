@@ -63,7 +63,7 @@ public class GetInventoryReportHandler : IRequestHandler<GetInventoryReportQuery
             productList.Count(p => p.StockQuantity <= request.LowStockThreshold && p.StockQuantity > 0),
             productList.Count(p => p.StockQuantity == 0),
             productList.Sum(p => p.Price.Amount * p.StockQuantity),
-            productList.Any() ? productList.Average(p => p.StockQuantity) : 0);
+            productList.Any() ? (decimal)productList.Average(p => p.StockQuantity) : 0);
 
         return new GetInventoryReportResponse(items, summary);
     }

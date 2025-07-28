@@ -9,6 +9,8 @@ public interface IProductRepository
     Task<IEnumerable<Product>> GetAllAsync(CancellationToken cancellationToken = default);
     Task<IEnumerable<Product>> GetActiveAsync(CancellationToken cancellationToken = default);
     Task<IEnumerable<Product>> GetByCategoryAsync(Guid categoryId, CancellationToken cancellationToken = default);
+    Task<IEnumerable<Product>> GetByCategoryIdAsync(Guid categoryId, CancellationToken cancellationToken = default);
+    Task<bool> HasProductsInCategoryAsync(Guid categoryId, CancellationToken cancellationToken = default);
     Task<IEnumerable<Product>> SearchAsync(string searchTerm, CancellationToken cancellationToken = default);
     Task<IEnumerable<Product>> GetLowStockAsync(int threshold = 10, CancellationToken cancellationToken = default);
     Task<(IEnumerable<Product> Products, int TotalCount)> GetPagedAsync(

@@ -168,7 +168,6 @@
 
 - [x] 8. Appointment Scheduling System
 
-
   - [x] 8.1 Build calendar and availability management
 
     - Implement doctor availability commands and queries
@@ -196,14 +195,10 @@
     - Write unit tests for appointment management
     - _Requirements: 5.1, 5.4, 5.5, 5.6, 5.9, 5.10_
 
-- [-] 9. Admin Dashboard Backend Services
+- [x] 9. Admin Dashboard Backend Services
 
 
-
-
-  - [ ] 9.1 Implement inventory and product management APIs
-
-
+  - [x] 9.1 Implement inventory and product management APIs
 
     - Create admin product management commands with validation
     - Build inventory tracking and stock management
@@ -212,7 +207,7 @@
     - Write unit tests for admin product features
     - _Requirements: 6.1, 6.12_
 
-  - [ ] 9.2 Build order management and reporting system
+  - [x] 9.2 Build order management and reporting system
 
     - Implement order management commands for admins
     - Create order analytics and reporting queries
@@ -221,7 +216,8 @@
     - Write unit tests for admin order management
     - _Requirements: 6.2, 6.3, 6.5, 6.7_
 
-  - [ ] 9.3 Create user management and role-based access
+  - [x] 9.3 Create user management and role-based access
+
     - Implement user management commands for admins
     - Build role-based authorization middleware
     - Create user analytics and reporting
