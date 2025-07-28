@@ -1,4 +1,5 @@
 using AutismCenter.Application.Common.Exceptions;
+using AutismCenter.Application.Common.Interfaces;
 using AutismCenter.Domain.Interfaces;
 using MediatR;
 

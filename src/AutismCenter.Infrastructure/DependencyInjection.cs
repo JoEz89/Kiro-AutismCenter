@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Http;
 using Amazon.S3;
 using AutismCenter.Application.Common.Interfaces;
 using AutismCenter.Application.Common.Settings;
@@ -75,7 +76,11 @@ public static class DependencyInjection
 
         // Localization Services
         services.AddScoped<ILocalizationService, LocalizationService>();
+        services.AddScoped<IContentFormattingService, ContentFormattingService>();
         services.AddScoped<IEmailTemplateService, EmailTemplateService>();
+        
+        // User Services
+        services.AddScoped<ICurrentUserService, CurrentUserService>();
 
         return services;
     }
