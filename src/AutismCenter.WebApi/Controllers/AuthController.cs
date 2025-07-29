@@ -179,23 +179,51 @@ public class AuthController : BaseController
         }
     }
 
+    /// <summary>
+    /// Send password reset email
+    /// </summary>
+    /// <param name="command">Email address for password reset</param>
+    /// <returns>Password reset result</returns>
     [HttpPost("forgot-password")]
+    [ProducesResponseType(typeof(ForgotPasswordResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(object), StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<ForgotPasswordResponse>> ForgotPassword([FromBody] ForgotPasswordCommand command)
     {
-        var result = await _mediator.Send(command);
-        return Ok(result);
-    }
-
-    [HttpPost("reset-password")]
-    public async Task<ActionResult<ResetPasswordResponse>> ResetPassword([FromBody] ResetPasswordCommand command)
-    {
-        var result = await _mediator.Send(command);
-        
-        if (result.Success)
+        try
         {
+            var result = await Mediator.Send(command);
             return Ok(result);
         }
-        
-        return BadRequest(result);
+        catch (ArgumentException ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
+    }
+
+    /// <summary>
+    /// Reset password using reset token
+    /// </summary>
+    /// <param name="command">Password reset details</param>
+    /// <returns>Password reset result</returns>
+    [HttpPost("reset-password")]
+    [ProducesResponseType(typeof(ResetPasswordResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ResetPasswordResponse), StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<ResetPasswordResponse>> ResetPassword([FromBody] ResetPasswordCommand command)
+    {
+        try
+        {
+            var result = await Mediator.Send(command);
+            
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            
+            return BadRequest(result);
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
     }
 }

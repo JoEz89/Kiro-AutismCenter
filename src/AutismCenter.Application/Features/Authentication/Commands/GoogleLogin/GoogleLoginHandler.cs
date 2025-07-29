@@ -104,7 +104,7 @@ public class GoogleLoginHandler : IRequestHandler<GoogleLoginCommand, Authentica
         var refreshTokenExpiration = DateTime.UtcNow.AddDays(_jwtSettings.RefreshTokenExpirationDays);
 
         // Store refresh token
-        var refreshTokenEntity = RefreshToken.Create(refreshToken, user.Id, refreshTokenExpiration);
+        var refreshTokenEntity = Domain.Entities.RefreshToken.Create(refreshToken, user.Id, refreshTokenExpiration);
         await _refreshTokenRepository.AddAsync(refreshTokenEntity);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
