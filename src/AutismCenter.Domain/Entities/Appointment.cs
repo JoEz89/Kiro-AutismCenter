@@ -156,6 +156,12 @@ public class Appointment : BaseEntity
         UpdateTimestamp();
     }
 
+    public void UpdateStatus(AppointmentStatus newStatus)
+    {
+        Status = newStatus;
+        UpdateTimestamp();
+    }
+
     public void AddNotes(string notes)
     {
         if (string.IsNullOrWhiteSpace(notes))

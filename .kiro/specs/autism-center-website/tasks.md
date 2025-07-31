@@ -244,7 +244,7 @@
     - Write integration tests for content management
     - _Requirements: 7.1, 7.2, 7.4, 7.7, 6.12_
 
-- [-] 11. API Controllers and Presentation Layer
+- [ ] 11. API Controllers and Presentation Layer
 
   - [x] 11.1 Create authentication and user management controllers
 
@@ -257,7 +257,6 @@
 
   - [x] 11.2 Build e-commerce API endpoints
 
-
     - Implement product catalog and search endpoints
     - Create shopping cart management endpoints
     - Build order processing and tracking endpoints
@@ -265,7 +264,7 @@
     - Write API integration tests for e-commerce features
     - _Requirements: 2.1, 2.2, 2.3, 2.5, 2.9, 2.10_
 
-  - [ ] 11.3 Create course management API endpoints
+  - [x] 11.3 Create course management API endpoints
 
     - Implement course catalog and enrollment endpoints
     - Build secure video streaming endpoints
@@ -274,7 +273,8 @@
     - Write API integration tests for course features
     - _Requirements: 3.1, 3.2, 3.4, 3.5, 3.6, 3.8_
 
-  - [ ] 11.4 Build appointment scheduling API endpoints
+  - [x] 11.4 Build appointment scheduling API endpoints
+
 
     - Implement appointment booking and management endpoints
     - Create doctor availability and calendar endpoints
@@ -283,15 +283,19 @@
     - Write API integration tests for appointment features
     - _Requirements: 5.1, 5.2, 5.3, 5.4, 5.5, 5.6_
 
-  - [ ] 11.5 Create admin dashboard API endpoints
+  - [-] 11.5 Create admin dashboard API endpoints
+
+
     - Implement admin management endpoints for all modules
     - Build reporting and analytics endpoints
+
     - Create data export endpoints (CSV)
     - Add content management endpoints for localization
     - Write API integration tests for admin features
     - _Requirements: 6.1, 6.2, 6.5, 6.7, 6.9, 6.11, 6.12_
 
 - [ ] 12. Frontend Foundation and Setup
+
 
   - [ ] 12.1 Set up React TypeScript project structure
 

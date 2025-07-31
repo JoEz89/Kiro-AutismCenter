@@ -58,6 +58,23 @@ public class AppointmentRepository : BaseRepository<Appointment>, IAppointmentRe
             .ToListAsync(cancellationToken);
     }
 
+    public async Task<IEnumerable<Appointment>> GetAppointmentsByDateRangeAsync(DateTime startDate, DateTime endDate, Guid? doctorId = null, CancellationToken cancellationToken = default)
+    {
+        var query = DbSet
+            .Include(a => a.User)
+            .Include(a => a.Doctor)
+            .Where(a => a.AppointmentDate >= startDate && a.AppointmentDate <= endDate);
+
+        if (doctorId.HasValue)
+        {
+            query = query.Where(a => a.DoctorId == doctorId.Value);
+        }
+
+        return await query
+            .OrderBy(a => a.AppointmentDate)
+            .ToListAsync(cancellationToken);
+    }
+
     public async Task<IEnumerable<Appointment>> GetUpcomingAppointmentsAsync(CancellationToken cancellationToken = default)
     {
         var now = DateTime.UtcNow;
