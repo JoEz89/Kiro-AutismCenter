@@ -18,4 +18,8 @@ public interface IEnrollmentRepository
     Task<bool> ExistsAsync(Guid id, CancellationToken cancellationToken = default);
     Task<bool> UserEnrolledInCourseAsync(Guid userId, Guid courseId, CancellationToken cancellationToken = default);
     Task<Enrollment?> GetActiveEnrollmentAsync(Guid userId, Guid courseId, CancellationToken cancellationToken = default);
+    Task<IEnumerable<Enrollment>> GetEnrollmentsByDateRangeAsync(DateTime startDate, DateTime endDate, CancellationToken cancellationToken = default);
+    Task<IEnumerable<ValueObjects.EnrollmentStats>> GetEnrollmentStatsByCourseIdsAsync(IEnumerable<Guid> courseIds, CancellationToken cancellationToken = default);
+    Task<IEnumerable<Enrollment>> GetRecentEnrollmentsAsync(int count, CancellationToken cancellationToken = default);
+    Task<bool> HasActiveEnrollmentsAsync(Guid courseId, CancellationToken cancellationToken = default);
 }

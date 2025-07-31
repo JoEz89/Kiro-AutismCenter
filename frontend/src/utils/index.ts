@@ -1,1 +1,2 @@
-// Utility functions will be exported from here
+// Utility functions
+export * from '../lib/utils';

@@ -16,4 +16,5 @@ public interface IUserRepository
     Task DeleteAsync(User user, CancellationToken cancellationToken = default);
     Task<bool> ExistsAsync(Guid id, CancellationToken cancellationToken = default);
     Task<bool> EmailExistsAsync(Email email, CancellationToken cancellationToken = default);
+    Task<IEnumerable<User>> GetUsersForExportAsync(string? role, bool? isActive, DateTime? startDate, DateTime? endDate, CancellationToken cancellationToken = default);
 }

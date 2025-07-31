@@ -1,1 +1,2 @@
-// Custom hooks will be exported from here
+// Custom hooks
+// Export custom hooks here as they are created

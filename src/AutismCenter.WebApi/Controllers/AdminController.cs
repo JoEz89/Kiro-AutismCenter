@@ -28,7 +28,19 @@ using AutismCenter.Application.Features.ContentManagement.Commands.BulkUpdateLoc
 using AutismCenter.Application.Features.Appointments.Queries.Admin.GetAppointmentsAdmin;
 using AutismCenter.Application.Features.Appointments.Queries.Admin.GetAppointmentAnalytics;
 using AutismCenter.Application.Features.Appointments.Commands.Admin.UpdateAppointmentStatusAdmin;
+using AutismCenter.Application.Features.Courses.Queries.Admin.GetCoursesAdmin;
+using AutismCenter.Application.Features.Courses.Queries.Admin.GetCourseAnalytics;
+using AutismCenter.Application.Features.Courses.Queries.Admin.ExportCourses;
+using AutismCenter.Application.Features.Courses.Commands.Admin.CreateCourseAdmin;
+using AutismCenter.Application.Features.Courses.Commands.Admin.UpdateCourseAdmin;
+using AutismCenter.Application.Features.Courses.Commands.Admin.DeleteCourseAdmin;
+using AutismCenter.Application.Features.Dashboard.Queries.GetDashboardOverview;
+using AutismCenter.Application.Features.Analytics.Queries.GetSystemAnalytics;
+using AutismCenter.Application.Features.Users.Queries.Admin.ExportUsers;
+using AutismCenter.Application.Features.Products.Queries.Admin.ExportProducts;
+using AutismCenter.Application.Features.Appointments.Queries.Admin.ExportAppointments;
 using AutismCenter.WebApi.Models.Admin;
+using AutismCenter.Domain.Enums;
 
 namespace AutismCenter.WebApi.Controllers;
 
@@ -40,6 +52,71 @@ namespace AutismCenter.WebApi.Controllers;
 [Authorize(Roles = "Admin")]
 public class AdminController : BaseController
 {
+    #region Dashboard Overview
+
+    /// <summary>
+    /// Get dashboard overview with key metrics from all modules
+    /// </summary>
+    /// <param name="request">Dashboard overview parameters</param>
+    /// <returns>Dashboard overview data with key metrics</returns>
+    [HttpGet("dashboard")]
+    [ProducesResponseType(typeof(GetDashboardOverviewResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(object), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(object), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(object), StatusCodes.Status403Forbidden)]
+    public async Task<ActionResult<GetDashboardOverviewResponse>> GetDashboardOverview([FromQuery] GetDashboardOverviewRequest request)
+    {
+        try
+        {
+            var query = new GetDashboardOverviewQuery(
+                request.StartDate,
+                request.EndDate
+            );
+
+            var result = await Mediator.Send(query);
+            return Ok(result);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
+    }
+
+    /// <summary>
+    /// Get comprehensive system analytics across all modules
+    /// </summary>
+    /// <param name="request">System analytics parameters</param>
+    /// <returns>System-wide analytics data</returns>
+    [HttpGet("analytics")]
+    [ProducesResponseType(typeof(GetSystemAnalyticsResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(object), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(object), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(object), StatusCodes.Status403Forbidden)]
+    public async Task<ActionResult<GetSystemAnalyticsResponse>> GetSystemAnalytics([FromQuery] GetSystemAnalyticsRequest request)
+    {
+        try
+        {
+            var query = new GetSystemAnalyticsQuery(
+                request.StartDate,
+                request.EndDate,
+                request.IncludeUsers,
+                request.IncludeProducts,
+                request.IncludeOrders,
+                request.IncludeAppointments,
+                request.IncludeCourses
+            );
+
+            var result = await Mediator.Send(query);
+            return Ok(result);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
+    }
+
+    #endregion
+
     #region User Management
 
     /// <summary>
@@ -646,8 +723,7 @@ public class AdminController : BaseController
             var command = new ProcessRefundAdminCommand(
                 orderId,
                 request.Amount,
-                request.Reason,
-                request.RefundType
+                request.Reason
             );
 
             var result = await Mediator.Send(command);
@@ -761,6 +837,318 @@ public class AdminController : BaseController
 
     #endregion
 
+    #region Course Management
+
+    /// <summary>
+    /// Get all courses with filtering and pagination for admin management
+    /// </summary>
+    /// <param name="request">Course filtering and pagination parameters</param>
+    /// <returns>Paginated list of courses with admin details</returns>
+    [HttpGet("courses")]
+    [ProducesResponseType(typeof(GetCoursesAdminResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(object), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(object), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(object), StatusCodes.Status403Forbidden)]
+    public async Task<ActionResult<GetCoursesAdminResponse>> GetCourses([FromQuery] GetCoursesAdminRequest request)
+    {
+        try
+        {
+            var query = new GetCoursesAdminQuery(
+                request.PageNumber,
+                request.PageSize,
+                request.IsActive,
+                request.CategoryId,
+                request.SearchTerm,
+                request.SortBy,
+                request.SortDirection.ToLower() == "desc"
+            );
+
+            var result = await Mediator.Send(query);
+            return Ok(result);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
+    }
+
+    /// <summary>
+    /// Get course analytics and statistics
+    /// </summary>
+    /// <param name="request">Analytics parameters</param>
+    /// <returns>Course analytics data</returns>
+    [HttpGet("courses/analytics")]
+    [ProducesResponseType(typeof(GetCourseAnalyticsResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(object), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(object), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(object), StatusCodes.Status403Forbidden)]
+    public async Task<ActionResult<GetCourseAnalyticsResponse>> GetCourseAnalytics([FromQuery] GetCourseAnalyticsRequest request)
+    {
+        try
+        {
+            var query = new GetCourseAnalyticsQuery(
+                request.StartDate,
+                request.EndDate,
+                request.CategoryId
+            );
+
+            var result = await Mediator.Send(query);
+            return Ok(result);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
+    }
+
+    /// <summary>
+    /// Export courses to CSV format
+    /// </summary>
+    /// <param name="request">Export parameters</param>
+    /// <returns>CSV file download</returns>
+    [HttpGet("courses/export")]
+    [ProducesResponseType(typeof(FileResult), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(object), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(object), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(object), StatusCodes.Status403Forbidden)]
+    public async Task<ActionResult> ExportCourses([FromQuery] ExportCoursesRequest request)
+    {
+        try
+        {
+            var query = new ExportCoursesQuery(
+                request.IsActive,
+                request.CategoryId,
+                request.Format.ToUpper()
+            );
+
+            var result = await Mediator.Send(query);
+            
+            return File(
+                result.FileContent,
+                result.ContentType,
+                result.FileName
+            );
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
+    }
+
+    /// <summary>
+    /// Create new course
+    /// </summary>
+    /// <param name="request">Course creation request</param>
+    /// <returns>Created course information</returns>
+    [HttpPost("courses")]
+    [ProducesResponseType(typeof(CreateCourseAdminResponse), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(object), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(object), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(object), StatusCodes.Status403Forbidden)]
+    public async Task<ActionResult<CreateCourseAdminResponse>> CreateCourse([FromBody] CreateCourseAdminRequest request)
+    {
+        try
+        {
+            var command = new CreateCourseAdminCommand(
+                request.TitleEn,
+                request.TitleAr,
+                request.DescriptionEn ?? string.Empty,
+                request.DescriptionAr ?? string.Empty,
+                request.Duration,
+                request.Price,
+                "BHD", // Currency
+                request.CategoryId,
+                $"CRS-{Guid.NewGuid().ToString()[..8]}", // CourseCode
+                request.ThumbnailUrl,
+                request.IsActive
+            );
+
+            var result = await Mediator.Send(command);
+            return CreatedAtAction(nameof(CreateCourse), new { id = result.Id }, result);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
+    }
+
+    /// <summary>
+    /// Update existing course
+    /// </summary>
+    /// <param name="courseId">Course ID</param>
+    /// <param name="request">Course update request</param>
+    /// <returns>Updated course information</returns>
+    [HttpPut("courses/{courseId:guid}")]
+    [ProducesResponseType(typeof(UpdateCourseAdminResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(object), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(object), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(object), StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(typeof(object), StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<UpdateCourseAdminResponse>> UpdateCourse(Guid courseId, [FromBody] UpdateCourseAdminRequest request)
+    {
+        try
+        {
+            var command = new UpdateCourseAdminCommand(
+                courseId,
+                request.TitleEn,
+                request.TitleAr,
+                request.DescriptionEn ?? string.Empty,
+                request.DescriptionAr ?? string.Empty,
+                request.Duration,
+                request.Price,
+                "BHD", // Currency
+                request.CategoryId,
+                request.ThumbnailUrl,
+                request.IsActive
+            );
+
+            var result = await Mediator.Send(command);
+            return Ok(result);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
+    }
+
+    /// <summary>
+    /// Delete course
+    /// </summary>
+    /// <param name="courseId">Course ID</param>
+    /// <returns>Deletion result</returns>
+    [HttpDelete("courses/{courseId:guid}")]
+    [ProducesResponseType(typeof(DeleteCourseAdminResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(object), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(object), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(object), StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(typeof(object), StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<DeleteCourseAdminResponse>> DeleteCourse(Guid courseId)
+    {
+        try
+        {
+            var command = new DeleteCourseAdminCommand(courseId);
+            var result = await Mediator.Send(command);
+            return Ok(result);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
+    }
+
+    #endregion
+
+    #region Data Export
+
+    /// <summary>
+    /// Export users to CSV format
+    /// </summary>
+    /// <param name="request">Export parameters</param>
+    /// <returns>CSV file download</returns>
+    [HttpGet("users/export")]
+    [ProducesResponseType(typeof(FileResult), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(object), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(object), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(object), StatusCodes.Status403Forbidden)]
+    public async Task<ActionResult> ExportUsers([FromQuery] ExportUsersRequest request)
+    {
+        try
+        {
+            var query = new ExportUsersQuery(
+                request.Role,
+                request.IsActive,
+                request.StartDate,
+                request.EndDate,
+                request.Format.ToUpper()
+            );
+
+            var result = await Mediator.Send(query);
+            
+            return File(
+                result.FileContent,
+                result.ContentType,
+                result.FileName
+            );
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
+    }
+
+    /// <summary>
+    /// Export products to CSV format
+    /// </summary>
+    /// <param name="request">Export parameters</param>
+    /// <returns>CSV file download</returns>
+    [HttpGet("products/export")]
+    [ProducesResponseType(typeof(FileResult), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(object), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(object), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(object), StatusCodes.Status403Forbidden)]
+    public async Task<ActionResult> ExportProducts([FromQuery] ExportProductsRequest request)
+    {
+        try
+        {
+            var query = new ExportProductsQuery(
+                request.CategoryId,
+                request.IsActive,
+                request.LowStockOnly,
+                request.Format.ToUpper()
+            );
+
+            var result = await Mediator.Send(query);
+            
+            return File(
+                result.FileContent,
+                result.ContentType,
+                result.FileName
+            );
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
+    }
+
+    /// <summary>
+    /// Export appointments to CSV format
+    /// </summary>
+    /// <param name="request">Export parameters</param>
+    /// <returns>CSV file download</returns>
+    [HttpGet("appointments/export")]
+    [ProducesResponseType(typeof(FileResult), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(object), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(object), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(object), StatusCodes.Status403Forbidden)]
+    public async Task<ActionResult> ExportAppointments([FromQuery] ExportAppointmentsRequest request)
+    {
+        try
+        {
+            var query = new ExportAppointmentsQuery(
+                request.StartDate,
+                request.EndDate,
+                request.Status,
+                request.DoctorId,
+                request.Format.ToUpper()
+            );
+
+            var result = await Mediator.Send(query);
+            
+            return File(
+                result.FileContent,
+                result.ContentType,
+                result.FileName
+            );
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
+    }
+
+    #endregion
+
     #region Content Management
 
     /// <summary>
@@ -777,9 +1165,16 @@ public class AdminController : BaseController
     {
         try
         {
+            Language? language = null;
+            if (!string.IsNullOrEmpty(request.Language))
+            {
+                Enum.TryParse<Language>(request.Language, true, out var parsedLanguage);
+                language = parsedLanguage;
+            }
+
             var query = new GetLocalizedContentListQuery(
                 request.Category,
-                request.Language,
+                language,
                 request.IsActive,
                 request.SearchTerm,
                 request.PageNumber,
@@ -809,17 +1204,27 @@ public class AdminController : BaseController
     {
         try
         {
-            var command = new CreateLocalizedContentCommand(
+            // Create English content
+            var englishCommand = new CreateLocalizedContentCommand(
                 request.Key,
-                request.Category,
+                Language.English,
                 request.EnglishContent,
-                request.ArabicContent,
-                request.ContentType,
-                request.IsActive
+                request.Category
             );
 
-            var result = await Mediator.Send(command);
-            return CreatedAtAction(nameof(CreateLocalizedContent), new { id = result.Id }, result);
+            var englishResult = await Mediator.Send(englishCommand);
+
+            // Create Arabic content
+            var arabicCommand = new CreateLocalizedContentCommand(
+                request.Key,
+                Language.Arabic,
+                request.ArabicContent,
+                request.Category
+            );
+
+            var arabicResult = await Mediator.Send(arabicCommand);
+
+            return CreatedAtAction(nameof(CreateLocalizedContent), new { id = englishResult.Id }, englishResult);
         }
         catch (Exception ex)
         {
@@ -845,12 +1250,7 @@ public class AdminController : BaseController
         {
             var command = new UpdateLocalizedContentCommand(
                 contentId,
-                request.Key,
-                request.Category,
-                request.EnglishContent,
-                request.ArabicContent,
-                request.ContentType,
-                request.IsActive
+                request.EnglishContent // Assuming this is for English content
             );
 
             var result = await Mediator.Send(command);
@@ -901,7 +1301,16 @@ public class AdminController : BaseController
     {
         try
         {
-            var command = new BulkUpdateLocalizedContentCommand(request.ContentUpdates);
+            var bulkItems = request.ContentUpdates.SelectMany(cu => new[]
+            {
+                new BulkUpdateLocalizedContentItem(cu.Key, Language.English, cu.EnglishContent),
+                new BulkUpdateLocalizedContentItem(cu.Key, Language.Arabic, cu.ArabicContent)
+            });
+
+            var command = new BulkUpdateLocalizedContentCommand(
+                request.ContentUpdates.FirstOrDefault()?.Category ?? "general",
+                bulkItems
+            );
             var result = await Mediator.Send(command);
             return Ok(result);
         }

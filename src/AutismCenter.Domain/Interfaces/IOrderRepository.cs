@@ -20,4 +20,6 @@ public interface IOrderRepository
     Task<bool> HasProductBeenOrderedAsync(Guid productId, CancellationToken cancellationToken = default);
     Task<bool> HasOrdersForProductAsync(Guid productId, CancellationToken cancellationToken = default);
     Task<IEnumerable<Order>> GetOrdersWithItemsByDateRangeAsync(DateTime startDate, DateTime endDate, CancellationToken cancellationToken = default);
+    Task<IEnumerable<Order>> GetOrdersByDateRangeAsync(DateTime startDate, DateTime endDate, CancellationToken cancellationToken = default);
+    Task<IEnumerable<Order>> GetRecentOrdersAsync(int count, CancellationToken cancellationToken = default);
 }

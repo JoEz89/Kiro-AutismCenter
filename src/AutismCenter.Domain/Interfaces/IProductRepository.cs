@@ -42,4 +42,5 @@ public interface IProductRepository
     Task<bool> ExistsAsync(Guid id, CancellationToken cancellationToken = default);
     Task<bool> SkuExistsAsync(string sku, CancellationToken cancellationToken = default);
     Task<IEnumerable<Product>> GetAllWithCategoriesAsync(CancellationToken cancellationToken = default);
+    Task<IEnumerable<Product>> GetProductsForExportAsync(Guid? categoryId, bool? isActive, bool lowStockOnly, CancellationToken cancellationToken = default);
 }

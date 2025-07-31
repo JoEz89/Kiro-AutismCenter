@@ -15,4 +15,7 @@ public interface ICourseRepository
     Task<bool> ExistsAsync(Guid id, CancellationToken cancellationToken = default);
     Task<bool> CodeExistsAsync(string courseCode, CancellationToken cancellationToken = default);
     Task<CourseModule?> GetModuleByIdAsync(Guid moduleId, CancellationToken cancellationToken = default);
+    Task<(IEnumerable<Course> Items, int TotalCount)> GetCoursesWithDetailsAsync(int pageNumber, int pageSize, bool? isActive, Guid? categoryId, string? searchTerm, string sortBy, bool sortDescending, CancellationToken cancellationToken = default);
+    Task<IEnumerable<Course>> GetCoursesByCategoryAsync(Guid? categoryId, CancellationToken cancellationToken = default);
+    Task<IEnumerable<Course>> GetCoursesForExportAsync(bool? isActive, Guid? categoryId, CancellationToken cancellationToken = default);
 }

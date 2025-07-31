@@ -21,4 +21,6 @@ public interface IAppointmentRepository
     Task DeleteAsync(Appointment appointment, CancellationToken cancellationToken = default);
     Task<bool> ExistsAsync(Guid id, CancellationToken cancellationToken = default);
     Task<string> GenerateAppointmentNumberAsync(CancellationToken cancellationToken = default);
+    Task<IEnumerable<Appointment>> GetAppointmentsForExportAsync(DateTime? startDate, DateTime? endDate, string? status, Guid? doctorId, CancellationToken cancellationToken = default);
+    Task<IEnumerable<Appointment>> GetRecentAppointmentsAsync(int count, CancellationToken cancellationToken = default);
 }

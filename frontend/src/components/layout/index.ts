@@ -1,1 +1,2 @@
-// Layout components will be exported from here
+// Layout Components
+// Export layout components here as they are created

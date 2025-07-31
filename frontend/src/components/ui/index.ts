@@ -1,1 +1,2 @@
-// UI components will be exported from here
+// UI Components
+// Export UI components here as they are created
