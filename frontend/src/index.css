@@ -1,3 +1,48 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* RTL and LTR support */
+[dir="rtl"] {
+  font-family: 'Noto Sans Arabic', Arial, sans-serif;
+}
+
+[dir="ltr"] {
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+/* RTL-specific styles */
+.rtl {
+  direction: rtl;
+}
+
+.ltr {
+  direction: ltr;
+}
+
+/* Ensure proper text alignment for RTL */
+[dir="rtl"] .text-left {
+  text-align: right;
+}
+
+[dir="rtl"] .text-right {
+  text-align: left;
+}
+
+/* RTL-specific margin and padding adjustments */
+[dir="rtl"] .ml-auto {
+  margin-left: unset;
+  margin-right: auto;
+}
+
+[dir="rtl"] .mr-auto {
+  margin-right: unset;
+  margin-left: auto;
+}
+
+/* Dark mode transitions */
+* {
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}

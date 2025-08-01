@@ -1,16 +1,16 @@
-import React, { createContext, useContext, useReducer, useEffect } from 'react';
-import { User, AuthState, LoginCredentials, RegisterData } from '@/types';
+import React, { createContext, useReducer, useEffect } from 'react';
+import type { User, AuthState, LoginCredentials, RegisterData } from '@/types';
 import { authService } from '@/services/authService';
 
 interface AuthContextType extends AuthState {
   login: (credentials: LoginCredentials) => Promise<void>;
   register: (data: RegisterData) => Promise<void>;
-  logout: () => void;
+  logout: () => Promise<void>;
   loginWithGoogle: () => Promise<void>;
   refreshToken: () => Promise<void>;
 }
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 type AuthAction =
   | { type: 'SET_LOADING'; payload: boolean }
@@ -87,10 +87,13 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     dispatch({ type: 'SET_LOADING', payload: true });
     try {
       const response = await authService.login(credentials);
-      const { user, token } = response.data;
+      const { user, token, refreshToken } = response.data;
 
       localStorage.setItem('authToken', token);
       localStorage.setItem('user', JSON.stringify(user));
+      if (refreshToken) {
+        localStorage.setItem('refreshToken', refreshToken);
+      }
 
       dispatch({ type: 'SET_TOKEN', payload: token });
       dispatch({ type: 'SET_USER', payload: user });
@@ -128,10 +131,17 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
-  const logout = () => {
-    localStorage.removeItem('authToken');
-    localStorage.removeItem('user');
-    dispatch({ type: 'LOGOUT' });
+  const logout = async () => {
+    try {
+      await authService.logout();
+    } catch (error) {
+      console.warn('Logout request failed:', error);
+    } finally {
+      localStorage.removeItem('authToken');
+      localStorage.removeItem('refreshToken');
+      localStorage.removeItem('user');
+      dispatch({ type: 'LOGOUT' });
+    }
   };
 
   const refreshToken = async () => {
@@ -158,12 +168,4 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
-};
-
-export const useAuth = (): AuthContextType => {
-  const context = useContext(AuthContext);
-  if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
-  return context;
 };

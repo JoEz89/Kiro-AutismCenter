@@ -1,2 +1,4 @@
 // Context providers
-// Export context providers here as they are created
+export { AuthProvider, AuthContext } from './AuthContext';
+export { LanguageProvider, LanguageContext, useLanguage, type Direction } from './LanguageContext';
+export { ThemeProvider, ThemeContext, useTheme } from './ThemeContext';

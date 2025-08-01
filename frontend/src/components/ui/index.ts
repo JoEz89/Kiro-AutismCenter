@@ -1,2 +1,3 @@
 // UI Components
-// Export UI components here as they are created
+export { default as LanguageSwitcher } from './LanguageSwitcher';
+export { default as ThemeSwitcher } from './ThemeSwitcher';

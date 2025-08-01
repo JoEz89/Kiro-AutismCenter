@@ -4,6 +4,7 @@ export default {
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
+  darkMode: 'class', // Enable dark mode with class strategy
   theme: {
     extend: {
       fontFamily: {
@@ -47,6 +48,19 @@ export default {
         },
         '.ltr': {
           direction: 'ltr',
+        },
+        // RTL-specific utilities
+        '.rtl .text-right': {
+          'text-align': 'right',
+        },
+        '.rtl .text-left': {
+          'text-align': 'left',
+        },
+        '.ltr .text-right': {
+          'text-align': 'right',
+        },
+        '.ltr .text-left': {
+          'text-align': 'left',
         },
       }
       addUtilities(newUtilities)
