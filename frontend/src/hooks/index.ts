@@ -5,3 +5,4 @@ export * from './useKeyboardNavigation';
 export * from './useAccessibility';
 export * from './useProducts';
 export * from './useCourses';
+export * from './useBookmarks';

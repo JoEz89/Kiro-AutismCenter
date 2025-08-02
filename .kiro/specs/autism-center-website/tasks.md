@@ -366,7 +366,6 @@
 
 - [x] 15. E-commerce Frontend Implementation
 
-
   - [x] 15.1 Build product catalog and search
 
     - Create product grid and list views
@@ -396,13 +395,7 @@
 
 - [-] 16. Course Management Frontend
 
-
-
-
-
   - [x] 16.1 Build course catalog and enrollment
-
-
 
     - Create course catalog with filtering and search
     - Implement course detail pages with previews
@@ -414,6 +407,8 @@
   - [-] 16.2 Implement secure video player
 
 
+
+
     - Create custom video player component
     - Implement video access control and authentication
     - Build course navigation and module structure
@@ -421,7 +416,8 @@
     - Write component tests for video player
     - _Requirements: 3.2, 3.7_
 
-  - [-] 16.3 Create progress tracking and certificates
+  - [x] 16.3 Create progress tracking and certificates
+
 
     - Build course progress dashboard
     - Implement bookmark functionality for course sections

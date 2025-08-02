@@ -2,3 +2,7 @@ export { default as CourseCatalog } from './CourseCatalog';
 export { default as CourseCard } from './CourseCard';
 export { default as CourseFilters } from './CourseFilters';
 export { default as CourseDetail } from './CourseDetail';
+export { default as CourseProgressDashboard } from './CourseProgressDashboard';
+export { default as Certificate } from './Certificate';
+export { default as BookmarkButton } from './BookmarkButton';
+export { default as CourseCompletionTracker } from './CourseCompletionTracker';
