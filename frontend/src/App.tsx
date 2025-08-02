@@ -1,9 +1,12 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
-import { AuthProvider, LanguageProvider, ThemeProvider } from '@/context';
+import { AuthProvider, LanguageProvider, ThemeProvider, CartProvider } from '@/context';
 import { SkipLink } from '@/components';
 import { useLocalization } from '@/hooks';
 import HomePage from './pages/HomePage';
+import ProductsPage from './pages/ProductsPage';
+import ProductDetailPage from './pages/ProductDetailPage';
+import CartPage from './pages/CartPage';
 
 function AppContent() {
   const { t } = useLocalization();
@@ -21,6 +24,9 @@ function AppContent() {
         
         <Routes>
           <Route path="/" element={<HomePage />} />
+          <Route path="/products" element={<ProductsPage />} />
+          <Route path="/products/:id" element={<ProductDetailPage />} />
+          <Route path="/cart" element={<CartPage />} />
         </Routes>
       </div>
     </Router>
@@ -33,7 +39,9 @@ function App() {
       <ThemeProvider>
         <LanguageProvider>
           <AuthProvider>
-            <AppContent />
+            <CartProvider>
+              <AppContent />
+            </CartProvider>
           </AuthProvider>
         </LanguageProvider>
       </ThemeProvider>

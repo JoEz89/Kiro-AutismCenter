@@ -6,3 +6,5 @@ export * from './auth';
 export * from './landing';
 export * from './seo';
 export * from './accessibility';
+export * from './products';
+export * from './cart';

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useLocalization } from '@/hooks';
 import { LanguageSwitcher } from '@/components/ui';
+import { CartIcon } from '@/components/cart';
 import { cn } from '@/lib/utils';
 
 interface NavigationProps {
@@ -84,6 +85,7 @@ export const Navigation: React.FC<NavigationProps> = ({ className, id }) => {
 
           {/* Right side items */}
           <div className="hidden md:flex items-center space-x-4 rtl:space-x-reverse">
+            <CartIcon />
             <LanguageSwitcher variant="toggle" />
             
             {/* Auth buttons */}
@@ -108,6 +110,7 @@ export const Navigation: React.FC<NavigationProps> = ({ className, id }) => {
 
           {/* Mobile menu button */}
           <div className="md:hidden flex items-center space-x-2 rtl:space-x-reverse">
+            <CartIcon />
             <LanguageSwitcher variant="toggle" />
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
