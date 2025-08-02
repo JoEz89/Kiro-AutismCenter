@@ -6,9 +6,10 @@ import { cn } from '@/lib/utils';
 
 interface NavigationProps {
   className?: string;
+  id?: string;
 }
 
-export const Navigation: React.FC<NavigationProps> = ({ className }) => {
+export const Navigation: React.FC<NavigationProps> = ({ className, id }) => {
   const { t, isRTL } = useLocalization();
   const location = useLocation();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -33,12 +34,13 @@ export const Navigation: React.FC<NavigationProps> = ({ className }) => {
 
   return (
     <nav 
+      id={id}
       className={cn(
         'bg-white dark:bg-gray-900 shadow-sm border-b border-gray-200 dark:border-gray-700',
         className
       )}
       role="navigation"
-      aria-label={t('navigation.home')}
+      aria-label={t('accessibility.mainNavigation', 'Main navigation')}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
@@ -116,7 +118,8 @@ export const Navigation: React.FC<NavigationProps> = ({ className }) => {
                 'focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2'
               )}
               aria-expanded={isMobileMenuOpen}
-              aria-label="Toggle navigation menu"
+              aria-label={isMobileMenuOpen ? t('accessibility.closeMenu') : t('accessibility.openMenu')}
+              aria-controls="mobile-menu"
             >
               <span className="sr-only">Open main menu</span>
               {!isMobileMenuOpen ? (
@@ -135,7 +138,7 @@ export const Navigation: React.FC<NavigationProps> = ({ className }) => {
 
       {/* Mobile menu */}
       {isMobileMenuOpen && (
-        <div className="md:hidden">
+        <div className="md:hidden" id="mobile-menu">
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-gray-50 dark:bg-gray-800">
             {navigationItems.map((item) => (
               <Link

@@ -149,6 +149,17 @@
     "thisMonth": "هذا الشهر",
     "thisYear": "هذا العام"
   },
+  "accessibility": {
+    "skipToMain": "انتقل إلى المحتوى الرئيسي",
+    "skipToNavigation": "انتقل إلى التنقل",
+    "mainContent": "المحتوى الرئيسي",
+    "mainNavigation": "التنقل الرئيسي",
+    "openMenu": "فتح القائمة",
+    "closeMenu": "إغلاق القائمة",
+    "loading": "جاري التحميل",
+    "error": "حدث خطأ",
+    "success": "نجح"
+  },
   "errors": {
     "generic": "حدث خطأ ما. يرجى المحاولة مرة أخرى.",
     "network": "خطأ في الشبكة. يرجى التحقق من اتصالك.",

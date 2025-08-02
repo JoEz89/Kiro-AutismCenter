@@ -4,3 +4,5 @@ export * from './layout';
 export * from './forms';
 export * from './auth';
 export * from './landing';
+export * from './seo';
+export * from './accessibility';

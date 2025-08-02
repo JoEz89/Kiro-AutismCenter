@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useLocalization } from '@/hooks';
+import { useLocalization, useKeyboardNavigation } from '@/hooks';
 import { cn } from '@/lib/utils';
 
 interface Testimonial {
@@ -86,6 +86,15 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ classN
     const newIndex = currentIndex === testimonials.length - 1 ? 0 : currentIndex + 1;
     goToSlide(newIndex);
   };
+
+  // Keyboard navigation
+  useKeyboardNavigation({
+    onArrowLeft: goToPrevious,
+    onArrowRight: goToNext,
+    onHome: () => goToSlide(0),
+    onEnd: () => goToSlide(testimonials.length - 1),
+    enabled: true
+  });
 
   const currentTestimonial = testimonials[currentIndex];
 

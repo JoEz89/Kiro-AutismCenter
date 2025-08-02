@@ -7,13 +7,14 @@ interface ScreenReaderOnlyProps {
   as?: keyof JSX.IntrinsicElements;
 }
 
-export const ScreenReaderOnly: React.FC<ScreenReaderOnlyProps> = ({ 
+export const ScreenReaderOnly = React.forwardRef<HTMLElement, ScreenReaderOnlyProps>(({ 
   children, 
   className,
   as: Component = 'span'
-}) => {
+}, ref) => {
   return (
     <Component
+      ref={ref}
       className={cn(
         // Screen reader only - visually hidden but accessible to screen readers
         'sr-only',
@@ -28,6 +29,6 @@ export const ScreenReaderOnly: React.FC<ScreenReaderOnlyProps> = ({
       {children}
     </Component>
   );
-};
+});
 
 export default ScreenReaderOnly;

@@ -2,6 +2,125 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Accessibility improvements */
+@layer base {
+  /* Focus styles for better visibility */
+  *:focus {
+    outline: 2px solid theme('colors.blue.500');
+    outline-offset: 2px;
+  }
+
+  /* High contrast mode support */
+  @media (prefers-contrast: high) {
+    .bg-gray-50 {
+      background-color: white;
+    }
+    .bg-gray-900 {
+      background-color: black;
+    }
+    .text-gray-600 {
+      color: black;
+    }
+    .text-gray-300 {
+      color: white;
+    }
+  }
+
+  /* Reduced motion support */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+
+  /* Screen reader only utility */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  /* Skip link styles */
+  .skip-link {
+    position: absolute;
+    top: -40px;
+    left: 6px;
+    background: theme('colors.blue.600');
+    color: white;
+    padding: 8px 16px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: 500;
+    z-index: 50;
+    transition: top 0.2s;
+  }
+
+  .skip-link:focus {
+    top: 6px;
+  }
+
+  /* RTL support */
+  [dir="rtl"] .skip-link {
+    left: auto;
+    right: 6px;
+  }
+
+  /* Font support for Arabic */
+  .font-arabic {
+    font-family: 'Noto Sans Arabic', 'Arial Unicode MS', sans-serif;
+  }
+
+  /* Ensure proper line height for Arabic text */
+  [dir="rtl"] {
+    line-height: 1.8;
+  }
+
+  /* Better button accessibility */
+  button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  /* Form accessibility */
+  input:invalid,
+  textarea:invalid,
+  select:invalid {
+    border-color: theme('colors.red.500');
+  }
+
+  input:valid,
+  textarea:valid,
+  select:valid {
+    border-color: theme('colors.green.500');
+  }
+
+  /* Link accessibility */
+  a:not([class]) {
+    color: theme('colors.blue.600');
+    text-decoration: underline;
+  }
+
+  a:not([class]):hover {
+    color: theme('colors.blue.800');
+  }
+
+  a:not([class]):focus {
+    outline: 2px solid theme('colors.blue.500');
+    outline-offset: 2px;
+  }
+}
+
 /* RTL and LTR support */
 [dir="rtl"] {
   font-family: 'Noto Sans Arabic', Arial, sans-serif;
