@@ -394,9 +394,15 @@
     - Write integration tests for checkout process
     - _Requirements: 2.3, 2.4, 2.5, 2.10_
 
-- [ ] 16. Course Management Frontend
+- [-] 16. Course Management Frontend
 
-  - [ ] 16.1 Build course catalog and enrollment
+
+
+
+
+  - [x] 16.1 Build course catalog and enrollment
+
+
 
     - Create course catalog with filtering and search
     - Implement course detail pages with previews
@@ -405,7 +411,8 @@
     - Write component tests for course catalog
     - _Requirements: 3.1, 3.4, 3.8_
 
-  - [ ] 16.2 Implement secure video player
+  - [-] 16.2 Implement secure video player
+
 
     - Create custom video player component
     - Implement video access control and authentication
@@ -414,7 +421,8 @@
     - Write component tests for video player
     - _Requirements: 3.2, 3.7_
 
-  - [ ] 16.3 Create progress tracking and certificates
+  - [-] 16.3 Create progress tracking and certificates
+
     - Build course progress dashboard
     - Implement bookmark functionality for course sections
     - Create certificate download and display
