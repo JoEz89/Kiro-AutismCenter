@@ -22,7 +22,10 @@
     "download": "Download",
     "upload": "Upload",
     "submit": "Submit",
-    "reset": "Reset"
+    "reset": "Reset",
+    "and": "and",
+    "completed": "Completed",
+    "pending": "Pending"
   },
   "navigation": {
     "home": "Home",
@@ -62,7 +65,38 @@
     "accountCreated": "Account created successfully",
     "emailVerificationSent": "Email verification sent",
     "emailVerified": "Email verified successfully",
-    "passwordChanged": "Password changed successfully"
+    "passwordChanged": "Password changed successfully",
+    "welcomeBack": "Welcome back! Please sign in to your account.",
+    "emailPlaceholder": "Enter your email address",
+    "passwordPlaceholder": "Enter your password",
+    "orContinueWith": "Or continue with",
+    "newPassword": "New Password",
+    "currentPassword": "Current Password",
+    "passwordStrength": "Password Strength",
+    "weak": "Weak",
+    "medium": "Medium",
+    "strong": "Strong",
+    "passwordRequirements": "Password must be at least 8 characters with uppercase, lowercase, and number",
+    "sendResetEmail": "Send Reset Email",
+    "resetEmailSent": "Reset email sent successfully",
+    "passwordResetSuccess": "Password reset successfully",
+    "createAccount": "Create your account",
+    "agreeToTerms": "I agree to the Terms of Service and Privacy Policy",
+    "termsOfService": "Terms of Service",
+    "privacyPolicy": "Privacy Policy",
+    "preferredLanguage": "Preferred Language",
+    "resetPasswordInstructions": "Enter your email address and we'll send you a link to reset your password",
+    "invalidResetToken": "Invalid Reset Token",
+    "invalidResetTokenMessage": "The password reset token is invalid or has expired. Please request a new one.",
+    "requestNewReset": "Request New Reset",
+    "enterNewPassword": "Enter your new password below",
+    "passwordMustContain": "Password must contain",
+    "passwordReq": {
+      "minLength": "At least 8 characters",
+      "uppercase": "One uppercase letter",
+      "lowercase": "One lowercase letter",
+      "number": "One number"
+    }
   },
   "home": {
     "welcome": "Welcome to Autism Center",
@@ -167,5 +201,16 @@
     "notFound": "The requested resource was not found.",
     "validation": "Please check your input and try again.",
     "serverError": "Server error. Please try again later."
+  },
+  "validation": {
+    "required": "This field is required",
+    "invalidEmail": "Please enter a valid email address",
+    "passwordTooShort": "Password must be at least 8 characters",
+    "passwordMismatch": "Passwords do not match",
+    "passwordRequirements": "Password must contain uppercase, lowercase, and number",
+    "invalidPhone": "Please enter a valid phone number",
+    "invalidDate": "Please enter a valid date",
+    "minLength": "Must be at least {{min}} characters",
+    "maxLength": "Must be no more than {{max}} characters"
   }
 }

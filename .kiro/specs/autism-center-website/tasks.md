@@ -325,11 +325,6 @@
 
 - [x] 13. Landing Page and Navigation
 
-
-
-
-
-
   - [x] 13.1 Create responsive landing page
 
     - Build hero section with mission and services
@@ -348,9 +343,10 @@
     - Write accessibility tests
     - _Requirements: 1.8, 8.6_
 
-- [ ] 14. User Authentication Frontend
+- [x] 14. User Authentication Frontend
 
-  - [ ] 14.1 Build login and registration forms
+
+  - [x] 14.1 Build login and registration forms
 
     - Create responsive login form with validation
 
@@ -360,7 +356,8 @@
     - Write component tests for authentication forms
     - _Requirements: 4.1, 4.2, 4.3, 4.5_
 
-  - [ ] 14.2 Create password management features
+  - [x] 14.2 Create password management features
+
     - Implement forgot password form
     - Build password reset form with validation
     - Create password strength indicator

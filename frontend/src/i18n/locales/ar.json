@@ -22,7 +22,10 @@
     "download": "تحميل",
     "upload": "رفع",
     "submit": "إرسال",
-    "reset": "إعادة تعيين"
+    "reset": "إعادة تعيين",
+    "and": "و",
+    "completed": "مكتمل",
+    "pending": "معلق"
   },
   "navigation": {
     "home": "الرئيسية",
@@ -62,7 +65,38 @@
     "accountCreated": "تم إنشاء الحساب بنجاح",
     "emailVerificationSent": "تم إرسال رسالة التحقق من البريد الإلكتروني",
     "emailVerified": "تم التحقق من البريد الإلكتروني بنجاح",
-    "passwordChanged": "تم تغيير كلمة المرور بنجاح"
+    "passwordChanged": "تم تغيير كلمة المرور بنجاح",
+    "welcomeBack": "مرحباً بعودتك! يرجى تسجيل الدخول إلى حسابك.",
+    "emailPlaceholder": "أدخل عنوان بريدك الإلكتروني",
+    "passwordPlaceholder": "أدخل كلمة المرور",
+    "orContinueWith": "أو تابع مع",
+    "newPassword": "كلمة المرور الجديدة",
+    "currentPassword": "كلمة المرور الحالية",
+    "passwordStrength": "قوة كلمة المرور",
+    "weak": "ضعيفة",
+    "medium": "متوسطة",
+    "strong": "قوية",
+    "passwordRequirements": "يجب أن تكون كلمة المرور 8 أحرف على الأقل مع حرف كبير وصغير ورقم",
+    "sendResetEmail": "إرسال رسالة إعادة التعيين",
+    "resetEmailSent": "تم إرسال رسالة إعادة التعيين بنجاح",
+    "passwordResetSuccess": "تم إعادة تعيين كلمة المرور بنجاح",
+    "createAccount": "إنشاء حسابك",
+    "agreeToTerms": "أوافق على شروط الخدمة وسياسة الخصوصية",
+    "termsOfService": "شروط الخدمة",
+    "privacyPolicy": "سياسة الخصوصية",
+    "preferredLanguage": "اللغة المفضلة",
+    "resetPasswordInstructions": "أدخل عنوان بريدك الإلكتروني وسنرسل لك رابطاً لإعادة تعيين كلمة المرور",
+    "invalidResetToken": "رمز إعادة التعيين غير صالح",
+    "invalidResetTokenMessage": "رمز إعادة تعيين كلمة المرور غير صالح أو منتهي الصلاحية. يرجى طلب رمز جديد.",
+    "requestNewReset": "طلب إعادة تعيين جديدة",
+    "enterNewPassword": "أدخل كلمة المرور الجديدة أدناه",
+    "passwordMustContain": "يجب أن تحتوي كلمة المرور على",
+    "passwordReq": {
+      "minLength": "8 أحرف على الأقل",
+      "uppercase": "حرف كبير واحد",
+      "lowercase": "حرف صغير واحد",
+      "number": "رقم واحد"
+    }
   },
   "home": {
     "welcome": "مرحباً بكم في مركز التوحد",
@@ -167,5 +201,16 @@
     "notFound": "المورد المطلوب غير موجود.",
     "validation": "يرجى التحقق من إدخالك والمحاولة مرة أخرى.",
     "serverError": "خطأ في الخادم. يرجى المحاولة مرة أخرى لاحقاً."
+  },
+  "validation": {
+    "required": "هذا الحقل مطلوب",
+    "invalidEmail": "يرجى إدخال عنوان بريد إلكتروني صحيح",
+    "passwordTooShort": "يجب أن تكون كلمة المرور 8 أحرف على الأقل",
+    "passwordMismatch": "كلمات المرور غير متطابقة",
+    "passwordRequirements": "يجب أن تحتوي كلمة المرور على حرف كبير وصغير ورقم",
+    "invalidPhone": "يرجى إدخال رقم هاتف صحيح",
+    "invalidDate": "يرجى إدخال تاريخ صحيح",
+    "minLength": "يجب أن يكون {{min}} أحرف على الأقل",
+    "maxLength": "يجب ألا يزيد عن {{max}} أحرف"
   }
 }
