@@ -345,7 +345,6 @@
 
 - [x] 14. User Authentication Frontend
 
-
   - [x] 14.1 Build login and registration forms
 
     - Create responsive login form with validation
@@ -365,14 +364,10 @@
     - Write component tests for password features
     - _Requirements: 4.5, 4.6_
 
-- [-] 15. E-commerce Frontend Implementation
-
-
+- [x] 15. E-commerce Frontend Implementation
 
 
   - [x] 15.1 Build product catalog and search
-
-
 
     - Create product grid and list views
     - Implement product filtering and search
@@ -381,8 +376,7 @@
     - Write component tests for product catalog
     - _Requirements: 2.1, 2.6, 2.9_
 
-  - [-] 15.2 Implement shopping cart functionality
-
+  - [x] 15.2 Implement shopping cart functionality
 
     - Create shopping cart component with item management
     - Build cart sidebar/modal with quantity controls
@@ -391,7 +385,8 @@
     - Write component tests for shopping cart
     - _Requirements: 2.2, 2.8_
 
-  - [ ] 15.3 Create checkout and payment process
+  - [x] 15.3 Create checkout and payment process
+
     - Build multi-step checkout form
     - Implement Stripe payment integration
     - Create order confirmation and tracking pages

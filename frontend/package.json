@@ -16,6 +16,7 @@
     "test:ui": "vitest --ui"
   },
   "dependencies": {
+    "@headlessui/react": "^2.2.7",
     "axios": "^1.10.0",
     "clsx": "^2.0.0",
     "i18next": "^23.7.6",

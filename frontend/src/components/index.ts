@@ -8,3 +8,4 @@ export * from './seo';
 export * from './accessibility';
 export * from './products';
 export * from './cart';
+export * from './checkout';
