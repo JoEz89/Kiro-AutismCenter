@@ -9,6 +9,10 @@ import ProductDetailPage from './pages/ProductDetailPage';
 import CartPage from './pages/CartPage';
 import CheckoutPage from './pages/CheckoutPage';
 import OrderConfirmationPage from './pages/OrderConfirmationPage';
+import CoursesPage from './pages/CoursesPage';
+import CourseDetailPage from './pages/CourseDetailPage';
+import CourseLearningPage from './pages/CourseLearningPage';
+import CourseProgressPage from './pages/CourseProgressPage';
 
 function AppContent() {
   const { t } = useLocalization();
@@ -31,6 +35,10 @@ function AppContent() {
           <Route path="/cart" element={<CartPage />} />
           <Route path="/checkout" element={<CheckoutPage />} />
           <Route path="/order-confirmation/:orderId" element={<OrderConfirmationPage />} />
+          <Route path="/courses" element={<CoursesPage />} />
+          <Route path="/courses/:courseId" element={<CourseDetailPage />} />
+          <Route path="/courses/:courseId/learn" element={<CourseLearningPage />} />
+          <Route path="/courses/:courseId/progress" element={<CourseProgressPage />} />
         </Routes>
       </div>
     </Router>

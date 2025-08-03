@@ -6,3 +6,5 @@ export { default as CourseProgressDashboard } from './CourseProgressDashboard';
 export { default as Certificate } from './Certificate';
 export { default as BookmarkButton } from './BookmarkButton';
 export { default as CourseCompletionTracker } from './CourseCompletionTracker';
+export { default as VideoPlayer } from './VideoPlayer';
+export { default as CourseNavigation } from './CourseNavigation';

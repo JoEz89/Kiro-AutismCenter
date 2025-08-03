@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { courseService } from '../services/courseService';
 
-export interface Bookmark {
+interface Bookmark {
   moduleId: string;
   moduleTitle: string;
   bookmarkedAt: Date;
@@ -13,7 +13,10 @@ export const useBookmarks = (enrollmentId: string) => {
   const [error, setError] = useState<string | null>(null);
 
   const fetchBookmarks = useCallback(async () => {
-    if (!enrollmentId) return;
+    if (!enrollmentId) {
+      setLoading(false);
+      return;
+    }
 
     try {
       setLoading(true);
@@ -38,6 +41,8 @@ export const useBookmarks = (enrollmentId: string) => {
   }, [fetchBookmarks]);
 
   const addBookmark = useCallback(async (moduleId: string) => {
+    if (!enrollmentId) return;
+
     try {
       await courseService.addBookmark(enrollmentId, moduleId);
       await fetchBookmarks(); // Refresh bookmarks
@@ -47,6 +52,8 @@ export const useBookmarks = (enrollmentId: string) => {
   }, [enrollmentId, fetchBookmarks]);
 
   const removeBookmark = useCallback(async (moduleId: string) => {
+    if (!enrollmentId) return;
+
     try {
       await courseService.removeBookmark(enrollmentId, moduleId);
       await fetchBookmarks(); // Refresh bookmarks
@@ -59,10 +66,6 @@ export const useBookmarks = (enrollmentId: string) => {
     return bookmarks.some(bookmark => bookmark.moduleId === moduleId);
   }, [bookmarks]);
 
-  const refetch = useCallback(() => {
-    fetchBookmarks();
-  }, [fetchBookmarks]);
-
   return {
     bookmarks,
     loading,
@@ -70,7 +73,7 @@ export const useBookmarks = (enrollmentId: string) => {
     addBookmark,
     removeBookmark,
     isBookmarked,
-    refetch,
+    refetch: fetchBookmarks,
   };
 };
 

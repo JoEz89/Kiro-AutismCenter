@@ -404,10 +404,7 @@
     - Write component tests for course catalog
     - _Requirements: 3.1, 3.4, 3.8_
 
-  - [-] 16.2 Implement secure video player
-
-
-
+  - [x] 16.2 Implement secure video player
 
     - Create custom video player component
     - Implement video access control and authentication
@@ -418,7 +415,6 @@
 
   - [x] 16.3 Create progress tracking and certificates
 
-
     - Build course progress dashboard
     - Implement bookmark functionality for course sections
     - Create certificate download and display
@@ -426,9 +422,10 @@
     - Write component tests for progress features
     - _Requirements: 3.5, 3.6, 3.9, 3.10_
 
-- [ ] 17. Appointment Scheduling Frontend
+- [x] 17. Appointment Scheduling Frontend
 
-  - [ ] 17.1 Build calendar and appointment booking
+
+  - [x] 17.1 Build calendar and appointment booking
 
     - Create calendar component with available slots
     - Implement appointment booking form
@@ -437,7 +434,8 @@
     - Write component tests for appointment booking
     - _Requirements: 5.1, 5.2, 5.8, 5.9_
 
-  - [ ] 17.2 Create appointment management interface
+  - [x] 17.2 Create appointment management interface
+
     - Build user appointment dashboard
     - Implement appointment cancellation and rescheduling
     - Create Zoom meeting link integration
@@ -445,9 +443,12 @@
     - Write component tests for appointment management
     - _Requirements: 5.3, 5.4, 5.5, 5.6, 5.10_
 
-- [ ] 18. Admin Dashboard Frontend
+- [-] 18. Admin Dashboard Frontend
 
-  - [ ] 18.1 Create admin dashboard layout and navigation
+
+
+  - [-] 18.1 Create admin dashboard layout and navigation
+
 
     - Build responsive admin dashboard layout
     - Implement role-based navigation menu
