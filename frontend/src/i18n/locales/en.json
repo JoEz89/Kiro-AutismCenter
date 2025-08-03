@@ -578,5 +578,61 @@
       "cancelled": "Cancelled",
       "refunded": "Refunded"
     }
+  },
+  "admin": {
+    "title": "Admin Panel",
+    "dashboard": "Dashboard",
+    "products": "Product Management",
+    "orders": "Order Management",
+    "users": "User Management",
+    "courses": "Course Management",
+    "appointments": "Appointment Management",
+    "reports": "Reports & Analytics",
+    "settings": "Settings",
+    "navigation": "Admin navigation",
+    "role": "Administrator",
+    "accessDenied": "Access Denied",
+    "adminAccessRequired": "Administrator access is required to view this page.",
+    "dashboard": {
+      "title": "Dashboard Overview",
+      "subtitle": "Monitor your autism center's key metrics and performance.",
+      "welcome": "Welcome to Admin Dashboard",
+      "welcomeMessage": "Here's an overview of your autism center's performance.",
+      "totalRevenue": "Total Revenue",
+      "totalOrders": "Total Orders",
+      "totalUsers": "Total Users",
+      "totalCourses": "Total Courses",
+      "totalAppointments": "Total Appointments",
+      "revenueOverTime": "Revenue Over Time",
+      "orderStatus": "Order Status Distribution",
+      "recentActivity": "Recent Activity",
+      "loadError": "Failed to load dashboard data",
+      "noData": "No data available",
+      "revenue": "Revenue",
+      "orders": "orders",
+      "increaseFromLastMonth": "Increase from last month",
+      "decreaseFromLastMonth": "Decrease from last month",
+      "justNow": "Just now",
+      "minutesAgo": "{{minutes}} minutes ago",
+      "hoursAgo": "{{hours}} hours ago",
+      "noActivity": "No recent activity",
+      "noActivityDescription": "Recent system activity will appear here."
+    },
+    "activity": {
+      "order": {
+        "created": "placed a new order",
+        "shipped": "order was shipped"
+      },
+      "user": {
+        "registered": "registered a new account"
+      },
+      "course": {
+        "enrolled": "enrolled in a course"
+      },
+      "appointment": {
+        "booked": "booked an appointment",
+        "completed": "completed an appointment"
+      }
+    }
   }
 }

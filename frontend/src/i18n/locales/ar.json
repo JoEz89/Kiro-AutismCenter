@@ -578,5 +578,61 @@
       "cancelled": "ملغي",
       "refunded": "مسترد"
     }
+  },
+  "admin": {
+    "title": "لوحة الإدارة",
+    "dashboard": "لوحة التحكم",
+    "products": "إدارة المنتجات",
+    "orders": "إدارة الطلبات",
+    "users": "إدارة المستخدمين",
+    "courses": "إدارة الدورات",
+    "appointments": "إدارة المواعيد",
+    "reports": "التقارير والتحليلات",
+    "settings": "الإعدادات",
+    "navigation": "التنقل الإداري",
+    "role": "مدير",
+    "accessDenied": "تم رفض الوصول",
+    "adminAccessRequired": "يتطلب وصول المدير لعرض هذه الصفحة.",
+    "dashboard": {
+      "title": "نظرة عامة على لوحة التحكم",
+      "subtitle": "راقب المقاييس الرئيسية وأداء مركز التوحد الخاص بك.",
+      "welcome": "مرحباً بك في لوحة الإدارة",
+      "welcomeMessage": "إليك نظرة عامة على أداء مركز التوحد الخاص بك.",
+      "totalRevenue": "إجمالي الإيرادات",
+      "totalOrders": "إجمالي الطلبات",
+      "totalUsers": "إجمالي المستخدمين",
+      "totalCourses": "إجمالي الدورات",
+      "totalAppointments": "إجمالي المواعيد",
+      "revenueOverTime": "الإيرادات عبر الوقت",
+      "orderStatus": "توزيع حالة الطلبات",
+      "recentActivity": "النشاط الأخير",
+      "loadError": "فشل في تحميل بيانات لوحة التحكم",
+      "noData": "لا توجد بيانات متاحة",
+      "revenue": "الإيرادات",
+      "orders": "الطلبات",
+      "increaseFromLastMonth": "زيادة من الشهر الماضي",
+      "decreaseFromLastMonth": "انخفاض من الشهر الماضي",
+      "justNow": "الآن",
+      "minutesAgo": "منذ {{minutes}} دقيقة",
+      "hoursAgo": "منذ {{hours}} ساعة",
+      "noActivity": "لا يوجد نشاط حديث",
+      "noActivityDescription": "سيظهر النشاط الحديث للنظام هنا."
+    },
+    "activity": {
+      "order": {
+        "created": "تم إنشاء طلب جديد",
+        "shipped": "تم شحن الطلب"
+      },
+      "user": {
+        "registered": "تسجيل مستخدم جديد"
+      },
+      "course": {
+        "enrolled": "تسجيل في دورة"
+      },
+      "appointment": {
+        "booked": "تم حجز موعد",
+        "completed": "تم إكمال الموعد"
+      }
+    }
   }
 }

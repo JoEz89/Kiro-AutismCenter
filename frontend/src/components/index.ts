@@ -11,3 +11,4 @@ export * from './cart';
 export * from './checkout';
 export * from './courses';
 export * from './appointments';
+export * from './admin';

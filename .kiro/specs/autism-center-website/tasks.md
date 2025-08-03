@@ -424,7 +424,6 @@
 
 - [x] 17. Appointment Scheduling Frontend
 
-
   - [x] 17.1 Build calendar and appointment booking
 
     - Create calendar component with available slots
@@ -445,9 +444,7 @@
 
 - [-] 18. Admin Dashboard Frontend
 
-
-
-  - [-] 18.1 Create admin dashboard layout and navigation
+  - [x] 18.1 Create admin dashboard layout and navigation
 
 
     - Build responsive admin dashboard layout

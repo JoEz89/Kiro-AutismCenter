@@ -13,6 +13,7 @@ import CoursesPage from './pages/CoursesPage';
 import CourseDetailPage from './pages/CourseDetailPage';
 import CourseLearningPage from './pages/CourseLearningPage';
 import CourseProgressPage from './pages/CourseProgressPage';
+import AdminDashboardPage from './pages/AdminDashboardPage';
 
 function AppContent() {
   const { t } = useLocalization();
@@ -39,6 +40,10 @@ function AppContent() {
           <Route path="/courses/:courseId" element={<CourseDetailPage />} />
           <Route path="/courses/:courseId/learn" element={<CourseLearningPage />} />
           <Route path="/courses/:courseId/progress" element={<CourseProgressPage />} />
+          
+          {/* Admin Routes */}
+          <Route path="/admin" element={<AdminDashboardPage />} />
+          <Route path="/admin/dashboard" element={<AdminDashboardPage />} />
         </Routes>
       </div>
     </Router>
