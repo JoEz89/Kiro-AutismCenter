@@ -446,7 +446,6 @@
 
   - [x] 18.1 Create admin dashboard layout and navigation
 
-
     - Build responsive admin dashboard layout
     - Implement role-based navigation menu
     - Create dashboard overview with key metrics
@@ -454,17 +453,20 @@
     - Write component tests for dashboard layout
     - _Requirements: 6.10, 6.11_
 
-  - [ ] 18.2 Build product and inventory management
+  - [-] 18.2 Build product and inventory management
 
     - Create product management interface with CRUD operations
     - Implement inventory tracking and stock management
     - Build product category management
     - Add bulk operations and CSV import/export
     - Write component tests for product management
+
     - _Requirements: 6.1, 6.7, 6.12_
 
-  - [ ] 18.3 Implement order and user management
+  - [x] 18.3 Implement order and user management
+
     - Create order management interface with status updates
+
     - Build user management with role assignment
     - Implement refund processing interface
     - Add reporting and analytics dashboards

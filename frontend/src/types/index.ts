@@ -80,6 +80,15 @@ export interface Product {
   isActive: boolean;
 }
 
+export interface ProductCategory {
+  id: string;
+  nameEn: string;
+  nameAr: string;
+  descriptionEn?: string;
+  descriptionAr?: string;
+  isActive: boolean;
+}
+
 export interface CartItem {
   productId: string;
   quantity: number;
