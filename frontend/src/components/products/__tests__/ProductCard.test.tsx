@@ -1,105 +1,248 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { render, screen, fireEvent } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { BrowserRouter } from 'react-router-dom';
-import { vi } from 'vitest';
 import { ProductCard } from '../ProductCard';
-import { LanguageProvider } from '@/context';
-import type { Product } from '@/types';
+import { CartProvider } from '@/context/CartContext';
+import { LanguageProvider } from '@/context/LanguageContext';
+import { AuthProvider } from '@/context/AuthContext';
+import { testAccessibility } from '@/test/accessibility';
+import { Product } from '@/types';
 
 const mockProduct: Product = {
   id: '1',
-  nameEn: 'Test Product',
-  nameAr: 'منتج تجريبي',
-  descriptionEn: 'Test product description',
-  descriptionAr: 'وصف المنتج التجريبي',
-  price: 29.99,
-  currency: 'USD',
+  nameEn: 'Autism Learning Kit',
+  nameAr: 'مجموعة تعلم التوحد',
+  descriptionEn: 'A comprehensive learning kit for children with autism',
+  descriptionAr: 'مجموعة تعلم شاملة للأطفال المصابين بالتوحد',
+  price: 99.99,
+  currency: 'BHD',
   stockQuantity: 10,
-  categoryId: 'cat1',
-  imageUrls: ['https://example.com/image1.jpg'],
+  categoryId: 'cat-1',
+  imageUrls: ['https://example.com/image1.jpg', 'https://example.com/image2.jpg'],
   isActive: true,
 };
 
-const mockOutOfStockProduct: Product = {
-  ...mockProduct,
-  id: '2',
-  stockQuantity: 0,
-};
-
-const renderWithProviders = (component: React.ReactElement) => {
-  return render(
-    <BrowserRouter>
-      <LanguageProvider>
-        {component}
-      </LanguageProvider>
-    </BrowserRouter>
-  );
-};
+const TestWrapper = ({ children }: { children: React.ReactNode }) => (
+  <BrowserRouter>
+    <LanguageProvider>
+      <AuthProvider>
+        <CartProvider>
+          {children}
+        </CartProvider>
+      </AuthProvider>
+    </LanguageProvider>
+  </BrowserRouter>
+);
 
 describe('ProductCard', () => {
-  it('renders product information correctly', () => {
-    renderWithProviders(<ProductCard product={mockProduct} />);
-    
-    expect(screen.getByText('Test Product')).toBeInTheDocument();
-    expect(screen.getByText('Test product description')).toBeInTheDocument();
-    expect(screen.getByText('$29.99')).toBeInTheDocument();
+  beforeEach(() => {
+    vi.clearAllMocks();
   });
 
-  it('displays out of stock badge when product is out of stock', () => {
-    renderWithProviders(<ProductCard product={mockOutOfStockProduct} />);
-    
-    expect(screen.getByText('Out of Stock')).toBeInTheDocument();
-  });
-
-  it('calls onAddToCart when add to cart button is clicked', async () => {
-    const mockAddToCart = vi.fn();
-    renderWithProviders(
-      <ProductCard product={mockProduct} onAddToCart={mockAddToCart} />
+  it('should render product information correctly', () => {
+    render(
+      <TestWrapper>
+        <ProductCard product={mockProduct} />
+      </TestWrapper>
     );
-    
-    const addToCartButton = screen.getByText('Add to Cart');
-    fireEvent.click(addToCartButton);
-    
-    await waitFor(() => {
-      expect(mockAddToCart).toHaveBeenCalledWith('1');
-    });
+
+    expect(screen.getByText('Autism Learning Kit')).toBeInTheDocument();
+    expect(screen.getByText('A comprehensive learning kit for children with autism')).toBeInTheDocument();
+    expect(screen.getByText('99.99 BHD')).toBeInTheDocument();
+    expect(screen.getByRole('img', { name: /autism learning kit/i })).toBeInTheDocument();
   });
 
-  it('disables add to cart button when product is out of stock', () => {
-    const mockAddToCart = vi.fn();
-    renderWithProviders(
-      <ProductCard product={mockOutOfStockProduct} onAddToCart={mockAddToCart} />
+  it('should render Arabic content when Arabic language is selected', () => {
+    // Mock Arabic language context
+    vi.doMock('@/hooks/useLocalization', () => ({
+      useLocalization: () => ({
+        language: 'ar',
+        t: (key: string) => key,
+        isRTL: true,
+      }),
+    }));
+
+    render(
+      <TestWrapper>
+        <ProductCard product={mockProduct} />
+      </TestWrapper>
     );
-    
+
+    expect(screen.getByText('مجموعة تعلم التوحد')).toBeInTheDocument();
+    expect(screen.getByText('مجموعة تعلم شاملة للأطفال المصابين بالتوحد')).toBeInTheDocument();
+  });
+
+  it('should handle add to cart action', async () => {
+    const user = userEvent.setup();
+    const mockAddToCart = vi.fn();
+
+    // Mock cart context
+    vi.doMock('@/context/CartContext', () => ({
+      useCart: () => ({
+        addToCart: mockAddToCart,
+        isLoading: false,
+      }),
+    }));
+
+    render(
+      <TestWrapper>
+        <ProductCard product={mockProduct} />
+      </TestWrapper>
+    );
+
     const addToCartButton = screen.getByRole('button', { name: /add to cart/i });
-    expect(addToCartButton).toBeDisabled();
+    await user.click(addToCartButton);
+
+    expect(mockAddToCart).toHaveBeenCalledWith(mockProduct.id, 1);
   });
 
-  it('shows low stock warning when stock is low', () => {
-    const lowStockProduct = { ...mockProduct, stockQuantity: 3 };
-    renderWithProviders(<ProductCard product={lowStockProduct} />);
-    
-    expect(screen.getByText('Only 3 left')).toBeInTheDocument();
-  });
+  it('should show out of stock state when product is out of stock', () => {
+    const outOfStockProduct = { ...mockProduct, stockQuantity: 0 };
 
-  it('renders fallback image when image fails to load', () => {
-    renderWithProviders(<ProductCard product={mockProduct} />);
-    
-    const image = screen.getByAltText('Test Product');
-    fireEvent.error(image);
-    
-    // Should show fallback SVG icon
-    expect(screen.getByRole('img', { hidden: true })).toBeInTheDocument();
-  });
-
-  it('has proper accessibility attributes', () => {
-    const mockAddToCart = vi.fn();
-    renderWithProviders(
-      <ProductCard product={mockProduct} onAddToCart={mockAddToCart} />
+    render(
+      <TestWrapper>
+        <ProductCard product={outOfStockProduct} />
+      </TestWrapper>
     );
-    
-    const addToCartButton = screen.getByRole('button', { 
-      name: 'Add to Cart Test Product' 
-    });
-    expect(addToCartButton).toBeInTheDocument();
+
+    expect(screen.getByText(/out of stock/i)).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /out of stock/i })).toBeDisabled();
+  });
+
+  it('should show loading state when adding to cart', () => {
+    // Mock loading state
+    vi.doMock('@/context/CartContext', () => ({
+      useCart: () => ({
+        addToCart: vi.fn(),
+        isLoading: true,
+      }),
+    }));
+
+    render(
+      <TestWrapper>
+        <ProductCard product={mockProduct} />
+      </TestWrapper>
+    );
+
+    expect(screen.getByRole('button', { name: /adding/i })).toBeDisabled();
+  });
+
+  it('should navigate to product detail page when clicked', async () => {
+    const user = userEvent.setup();
+
+    render(
+      <TestWrapper>
+        <ProductCard product={mockProduct} />
+      </TestWrapper>
+    );
+
+    const productLink = screen.getByRole('link');
+    expect(productLink).toHaveAttribute('href', `/products/${mockProduct.id}`);
+  });
+
+  it('should display product image with proper alt text', () => {
+    render(
+      <TestWrapper>
+        <ProductCard product={mockProduct} />
+      </TestWrapper>
+    );
+
+    const image = screen.getByRole('img');
+    expect(image).toHaveAttribute('src', mockProduct.imageUrls[0]);
+    expect(image).toHaveAttribute('alt', mockProduct.nameEn);
+  });
+
+  it('should handle image loading error gracefully', () => {
+    render(
+      <TestWrapper>
+        <ProductCard product={mockProduct} />
+      </TestWrapper>
+    );
+
+    const image = screen.getByRole('img');
+    fireEvent.error(image);
+
+    // Should show placeholder or fallback image
+    expect(image).toHaveAttribute('src', expect.stringContaining('placeholder'));
+  });
+
+  it('should be accessible', async () => {
+    const renderResult = render(
+      <TestWrapper>
+        <ProductCard product={mockProduct} />
+      </TestWrapper>
+    );
+
+    await testAccessibility(renderResult);
+  });
+
+  it('should support keyboard navigation', async () => {
+    const user = userEvent.setup();
+
+    render(
+      <TestWrapper>
+        <ProductCard product={mockProduct} />
+      </TestWrapper>
+    );
+
+    const productLink = screen.getByRole('link');
+    const addToCartButton = screen.getByRole('button', { name: /add to cart/i });
+
+    // Test tab navigation
+    await user.tab();
+    expect(productLink).toHaveFocus();
+
+    await user.tab();
+    expect(addToCartButton).toHaveFocus();
+
+    // Test enter key on button
+    await user.keyboard('{Enter}');
+    // Should trigger add to cart action
+  });
+
+  it('should display price in correct currency format', () => {
+    const usdProduct = { ...mockProduct, currency: 'USD' as const, price: 25.50 };
+
+    render(
+      <TestWrapper>
+        <ProductCard product={usdProduct} />
+      </TestWrapper>
+    );
+
+    expect(screen.getByText('25.50 USD')).toBeInTheDocument();
+  });
+
+  it('should truncate long product names appropriately', () => {
+    const longNameProduct = {
+      ...mockProduct,
+      nameEn: 'This is a very long product name that should be truncated to prevent layout issues',
+    };
+
+    render(
+      <TestWrapper>
+        <ProductCard product={longNameProduct} />
+      </TestWrapper>
+    );
+
+    const productName = screen.getByText(/this is a very long product name/i);
+    expect(productName).toHaveClass('truncate');
+  });
+
+  it('should show discount badge when product is on sale', () => {
+    const saleProduct = {
+      ...mockProduct,
+      originalPrice: 149.99,
+      isOnSale: true,
+    };
+
+    render(
+      <TestWrapper>
+        <ProductCard product={saleProduct} />
+      </TestWrapper>
+    );
+
+    expect(screen.getByText(/sale/i)).toBeInTheDocument();
+    expect(screen.getByText('149.99')).toHaveClass('line-through');
   });
 });

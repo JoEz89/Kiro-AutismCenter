@@ -1,10 +1,11 @@
-import React from 'react';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { BrowserRouter } from 'react-router-dom';
-import { vi } from 'vitest';
-import LoginForm from '../LoginForm';
-import { AuthContext } from '@/context/AuthContext';
-import { LanguageContext } from '@/context/LanguageContext';
+import { LoginForm } from '../LoginForm';
+import { AuthProvider } from '@/context/AuthContext';
+import { LanguageProvider } from '@/context/LanguageContext';
+import { testAccessibility } from '@/test/accessibility';
 
 // Mock the auth service
 vi.mock('@/services/authService', () => ({
@@ -14,156 +15,97 @@ vi.mock('@/services/authService', () => ({
   },
 }));
 
-// Mock the hooks
-vi.mock('@/hooks/useAuth', () => ({
-  useAuth: () => ({
-    login: vi.fn(),
-    loginWithGoogle: vi.fn(),
-    isLoading: false,
-  }),
-}));
-
-vi.mock('@/hooks/useLocalization', () => ({
-  useLocalization: () => ({
-    t: (key: string) => {
-      const translations: Record<string, string> = {
-        'auth.login': 'Login',
-        'auth.email': 'Email',
-        'auth.password': 'Password',
-        'auth.rememberMe': 'Remember Me',
-        'auth.forgotPassword': 'Forgot Password?',
-        'auth.loginWithGoogle': 'Login with Google',
-        'auth.dontHaveAccount': "Don't have an account?",
-        'auth.register': 'Register',
-        'auth.welcomeBack': 'Welcome back! Please sign in to your account.',
-        'auth.emailPlaceholder': 'Enter your email address',
-        'auth.passwordPlaceholder': 'Enter your password',
-        'auth.orContinueWith': 'Or continue with',
-        'common.loading': 'Loading...',
-        'validation.required': 'This field is required',
-        'validation.invalidEmail': 'Please enter a valid email address',
-      };
-      return translations[key] || key;
-    },
-    direction: 'ltr',
-  }),
-}));
-
-const renderLoginForm = (props = {}) => {
-  return render(
-    <BrowserRouter>
-      <LoginForm {...props} />
-    </BrowserRouter>
-  );
-};
+const TestWrapper = ({ children }: { children: React.ReactNode }) => (
+  <BrowserRouter>
+    <LanguageProvider>
+      <AuthProvider>
+        {children}
+      </AuthProvider>
+    </LanguageProvider>
+  </BrowserRouter>
+);
 
 describe('LoginForm', () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
-  it('renders login form with all required fields', () => {
-    renderLoginForm();
+  it('should render login form with all required fields', () => {
+    const renderResult = render(
+      <TestWrapper>
+        <LoginForm />
+      </TestWrapper>
+    );
 
-    expect(screen.getByRole('heading', { name: /login/i })).toBeInTheDocument();
     expect(screen.getByLabelText(/email/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/password/i)).toBeInTheDocument();
-    expect(screen.getByRole('checkbox', { name: /remember me/i })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /^login$/i })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /login with google/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /sign in/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /continue with google/i })).toBeInTheDocument();
   });
 
-  it('displays validation errors for empty fields', async () => {
-    renderLoginForm();
-
-    const submitButton = screen.getByRole('button', { name: /^login$/i });
-    fireEvent.click(submitButton);
-
-    await waitFor(() => {
-      expect(screen.getAllByText('This field is required')).toHaveLength(2);
-    });
-  });
-
-  it('displays validation error for invalid email', async () => {
-    renderLoginForm();
-
-    const emailInput = screen.getByLabelText(/email/i);
-    const submitButton = screen.getByRole('button', { name: /^login$/i });
-
-    fireEvent.change(emailInput, { target: { value: 'invalid-email' } });
-    fireEvent.click(submitButton);
-
-    await waitFor(() => {
-      expect(screen.getByText('Please enter a valid email address')).toBeInTheDocument();
-    });
-  });
-
-  it('clears validation errors when user starts typing', async () => {
-    renderLoginForm();
-
-    const emailInput = screen.getByLabelText(/email/i);
-    const submitButton = screen.getByRole('button', { name: /^login$/i });
-
-    // Trigger validation error
-    fireEvent.click(submitButton);
-    await waitFor(() => {
-      expect(screen.getByText('This field is required')).toBeInTheDocument();
-    });
-
-    // Start typing to clear error
-    fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
+  it('should validate required fields', async () => {
+    const user = userEvent.setup();
     
+    render(
+      <TestWrapper>
+        <LoginForm />
+      </TestWrapper>
+    );
+
+    const submitButton = screen.getByRole('button', { name: /sign in/i });
+    await user.click(submitButton);
+
     await waitFor(() => {
-      expect(screen.queryByText('This field is required')).not.toBeInTheDocument();
+      expect(screen.getByText(/email is required/i)).toBeInTheDocument();
+      expect(screen.getByText(/password is required/i)).toBeInTheDocument();
     });
   });
 
-  it('has proper accessibility attributes', () => {
-    renderLoginForm();
+  it('should validate email format', async () => {
+    const user = userEvent.setup();
+    
+    render(
+      <TestWrapper>
+        <LoginForm />
+      </TestWrapper>
+    );
 
     const emailInput = screen.getByLabelText(/email/i);
-    const passwordInput = screen.getByLabelText(/password/i);
-
-    expect(emailInput).toHaveAttribute('type', 'email');
-    expect(emailInput).toHaveAttribute('aria-invalid', 'false');
-    expect(passwordInput).toHaveAttribute('type', 'password');
-    expect(passwordInput).toHaveAttribute('aria-invalid', 'false');
-  });
-
-  it('shows loading state when submitting', async () => {
-    const mockLogin = vi.fn().mockImplementation(() => new Promise(resolve => setTimeout(resolve, 100)));
+    await user.type(emailInput, 'invalid-email');
     
-    vi.mocked(require('@/hooks/useAuth').useAuth).mockReturnValue({
-      login: mockLogin,
-      loginWithGoogle: vi.fn(),
-      isLoading: true,
+    const submitButton = screen.getByRole('button', { name: /sign in/i });
+    await user.click(submitButton);
+
+    await waitFor(() => {
+      expect(screen.getByText(/please enter a valid email address/i)).toBeInTheDocument();
     });
-
-    renderLoginForm();
-
-    expect(screen.getByText('Loading...')).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /loading/i })).toBeDisabled();
   });
 
-  it('calls onSuccess callback when login is successful', async () => {
-    const mockOnSuccess = vi.fn();
+  it('should handle successful login', async () => {
+    const user = userEvent.setup();
     const mockLogin = vi.fn().mockResolvedValue({});
+    
+    // Mock the useAuth hook
+    vi.doMock('@/hooks/useAuth', () => ({
+      useAuth: () => ({
+        login: mockLogin,
+        isLoading: false,
+      }),
+    }));
 
-    vi.mocked(require('@/hooks/useAuth').useAuth).mockReturnValue({
-      login: mockLogin,
-      loginWithGoogle: vi.fn(),
-      isLoading: false,
-    });
-
-    renderLoginForm({ onSuccess: mockOnSuccess });
+    render(
+      <TestWrapper>
+        <LoginForm />
+      </TestWrapper>
+    );
 
     const emailInput = screen.getByLabelText(/email/i);
     const passwordInput = screen.getByLabelText(/password/i);
-    const submitButton = screen.getByRole('button', { name: /^login$/i });
+    const submitButton = screen.getByRole('button', { name: /sign in/i });
 
-    fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
-    fireEvent.change(passwordInput, { target: { value: 'password123' } });
-    fireEvent.click(submitButton);
+    await user.type(emailInput, 'test@example.com');
+    await user.type(passwordInput, 'password123');
+    await user.click(submitButton);
 
     await waitFor(() => {
       expect(mockLogin).toHaveBeenCalledWith({
@@ -173,24 +115,110 @@ describe('LoginForm', () => {
     });
   });
 
-  it('has proper links to registration and forgot password', () => {
-    renderLoginForm();
+  it('should display loading state during login', async () => {
+    const user = userEvent.setup();
+    
+    // Mock loading state
+    vi.doMock('@/hooks/useAuth', () => ({
+      useAuth: () => ({
+        login: vi.fn(),
+        isLoading: true,
+      }),
+    }));
 
-    expect(screen.getByRole('link', { name: /register/i })).toHaveAttribute('href', '/register');
-    expect(screen.getByRole('link', { name: /forgot password/i })).toHaveAttribute('href', '/forgot-password');
+    render(
+      <TestWrapper>
+        <LoginForm />
+      </TestWrapper>
+    );
+
+    const submitButton = screen.getByRole('button', { name: /signing in/i });
+    expect(submitButton).toBeDisabled();
   });
 
-  it('toggles remember me checkbox', () => {
-    renderLoginForm();
+  it('should handle login error', async () => {
+    const user = userEvent.setup();
+    const mockLogin = vi.fn().mockRejectedValue(new Error('Invalid credentials'));
+    
+    vi.doMock('@/hooks/useAuth', () => ({
+      useAuth: () => ({
+        login: mockLogin,
+        isLoading: false,
+      }),
+    }));
 
-    const rememberMeCheckbox = screen.getByRole('checkbox', { name: /remember me/i });
+    render(
+      <TestWrapper>
+        <LoginForm />
+      </TestWrapper>
+    );
+
+    const emailInput = screen.getByLabelText(/email/i);
+    const passwordInput = screen.getByLabelText(/password/i);
+    const submitButton = screen.getByRole('button', { name: /sign in/i });
+
+    await user.type(emailInput, 'test@example.com');
+    await user.type(passwordInput, 'wrongpassword');
+    await user.click(submitButton);
+
+    await waitFor(() => {
+      expect(screen.getByText(/invalid credentials/i)).toBeInTheDocument();
+    });
+  });
+
+  it('should be accessible', async () => {
+    const renderResult = render(
+      <TestWrapper>
+        <LoginForm />
+      </TestWrapper>
+    );
+
+    await testAccessibility(renderResult);
+  });
+
+  it('should support keyboard navigation', async () => {
+    const user = userEvent.setup();
     
-    expect(rememberMeCheckbox).not.toBeChecked();
+    render(
+      <TestWrapper>
+        <LoginForm />
+      </TestWrapper>
+    );
+
+    const emailInput = screen.getByLabelText(/email/i);
+    const passwordInput = screen.getByLabelText(/password/i);
+    const submitButton = screen.getByRole('button', { name: /sign in/i });
+
+    // Test tab navigation
+    await user.tab();
+    expect(emailInput).toHaveFocus();
+
+    await user.tab();
+    expect(passwordInput).toHaveFocus();
+
+    await user.tab();
+    expect(submitButton).toHaveFocus();
+  });
+
+  it('should toggle password visibility', async () => {
+    const user = userEvent.setup();
     
-    fireEvent.click(rememberMeCheckbox);
-    expect(rememberMeCheckbox).toBeChecked();
-    
-    fireEvent.click(rememberMeCheckbox);
-    expect(rememberMeCheckbox).not.toBeChecked();
+    render(
+      <TestWrapper>
+        <LoginForm />
+      </TestWrapper>
+    );
+
+    const passwordInput = screen.getByLabelText(/password/i);
+    const toggleButton = screen.getByRole('button', { name: /show password/i });
+
+    expect(passwordInput).toHaveAttribute('type', 'password');
+
+    await user.click(toggleButton);
+    expect(passwordInput).toHaveAttribute('type', 'text');
+    expect(screen.getByRole('button', { name: /hide password/i })).toBeInTheDocument();
+
+    await user.click(toggleButton);
+    expect(passwordInput).toHaveAttribute('type', 'password');
   });
 });
