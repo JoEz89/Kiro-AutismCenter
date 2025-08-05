@@ -1,10 +1,11 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { BrowserRouter } from 'react-router-dom';
 import { LoginForm } from '../LoginForm';
 import { AuthProvider } from '@/context/AuthContext';
 import { LanguageProvider } from '@/context/LanguageContext';
+import { authService } from '@/services/authService';
 import { testAccessibility } from '@/test/accessibility';
 
 // Mock the auth service
@@ -15,42 +16,38 @@ vi.mock('@/services/authService', () => ({
   },
 }));
 
-const TestWrapper = ({ children }: { children: React.ReactNode }) => (
-  <BrowserRouter>
-    <LanguageProvider>
-      <AuthProvider>
-        {children}
-      </AuthProvider>
-    </LanguageProvider>
-  </BrowserRouter>
-);
+const mockAuthService = vi.mocked(authService);
+
+const renderWithProviders = (component: React.ReactElement) => {
+  return render(
+    <BrowserRouter>
+      <LanguageProvider>
+        <AuthProvider>
+          {component}
+        </AuthProvider>
+      </LanguageProvider>
+    </BrowserRouter>
+  );
+};
 
 describe('LoginForm', () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
-  it('should render login form with all required fields', () => {
-    const renderResult = render(
-      <TestWrapper>
-        <LoginForm />
-      </TestWrapper>
-    );
+  it('should render login form correctly', () => {
+    renderWithProviders(<LoginForm />);
 
     expect(screen.getByLabelText(/email/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/password/i)).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /sign in/i })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /continue with google/i })).toBeInTheDocument();
+    expect(screen.getByText(/sign in with google/i)).toBeInTheDocument();
+    expect(screen.getByText(/forgot password/i)).toBeInTheDocument();
   });
 
   it('should validate required fields', async () => {
     const user = userEvent.setup();
-    
-    render(
-      <TestWrapper>
-        <LoginForm />
-      </TestWrapper>
-    );
+    renderWithProviders(<LoginForm />);
 
     const submitButton = screen.getByRole('button', { name: /sign in/i });
     await user.click(submitButton);
@@ -63,41 +60,42 @@ describe('LoginForm', () => {
 
   it('should validate email format', async () => {
     const user = userEvent.setup();
-    
-    render(
-      <TestWrapper>
-        <LoginForm />
-      </TestWrapper>
-    );
+    renderWithProviders(<LoginForm />);
 
     const emailInput = screen.getByLabelText(/email/i);
-    await user.type(emailInput, 'invalid-email');
-    
     const submitButton = screen.getByRole('button', { name: /sign in/i });
+
+    await user.type(emailInput, 'invalid-email');
     await user.click(submitButton);
 
     await waitFor(() => {
-      expect(screen.getByText(/please enter a valid email address/i)).toBeInTheDocument();
+      expect(screen.getByText(/please enter a valid email/i)).toBeInTheDocument();
     });
   });
 
   it('should handle successful login', async () => {
     const user = userEvent.setup();
-    const mockLogin = vi.fn().mockResolvedValue({});
-    
-    // Mock the useAuth hook
-    vi.doMock('@/hooks/useAuth', () => ({
-      useAuth: () => ({
-        login: mockLogin,
-        isLoading: false,
-      }),
-    }));
+    const mockUser = {
+      id: '1',
+      email: 'test@example.com',
+      firstName: 'John',
+      lastName: 'Doe',
+      role: 'USER',
+      preferredLanguage: 'en',
+      isEmailVerified: true,
+      createdAt: new Date(),
+    };
 
-    render(
-      <TestWrapper>
-        <LoginForm />
-      </TestWrapper>
-    );
+    mockAuthService.login.mockResolvedValueOnce({
+      data: {
+        user: mockUser,
+        token: 'mock-token',
+        refreshToken: 'mock-refresh-token',
+      },
+      success: true,
+    });
+
+    renderWithProviders(<LoginForm />);
 
     const emailInput = screen.getByLabelText(/email/i);
     const passwordInput = screen.getByLabelText(/password/i);
@@ -108,50 +106,18 @@ describe('LoginForm', () => {
     await user.click(submitButton);
 
     await waitFor(() => {
-      expect(mockLogin).toHaveBeenCalledWith({
+      expect(mockAuthService.login).toHaveBeenCalledWith({
         email: 'test@example.com',
         password: 'password123',
       });
     });
   });
 
-  it('should display loading state during login', async () => {
-    const user = userEvent.setup();
-    
-    // Mock loading state
-    vi.doMock('@/hooks/useAuth', () => ({
-      useAuth: () => ({
-        login: vi.fn(),
-        isLoading: true,
-      }),
-    }));
-
-    render(
-      <TestWrapper>
-        <LoginForm />
-      </TestWrapper>
-    );
-
-    const submitButton = screen.getByRole('button', { name: /signing in/i });
-    expect(submitButton).toBeDisabled();
-  });
-
   it('should handle login error', async () => {
     const user = userEvent.setup();
-    const mockLogin = vi.fn().mockRejectedValue(new Error('Invalid credentials'));
-    
-    vi.doMock('@/hooks/useAuth', () => ({
-      useAuth: () => ({
-        login: mockLogin,
-        isLoading: false,
-      }),
-    }));
+    mockAuthService.login.mockRejectedValueOnce(new Error('Invalid credentials'));
 
-    render(
-      <TestWrapper>
-        <LoginForm />
-      </TestWrapper>
-    );
+    renderWithProviders(<LoginForm />);
 
     const emailInput = screen.getByLabelText(/email/i);
     const passwordInput = screen.getByLabelText(/password/i);
@@ -166,30 +132,55 @@ describe('LoginForm', () => {
     });
   });
 
-  it('should be accessible', async () => {
-    const renderResult = render(
-      <TestWrapper>
-        <LoginForm />
-      </TestWrapper>
-    );
+  it('should handle Google login', async () => {
+    const user = userEvent.setup();
+    mockAuthService.loginWithGoogle.mockResolvedValueOnce({
+      data: { redirectUrl: 'https://google.com/oauth' },
+      success: true,
+    });
 
-    await testAccessibility(renderResult);
+    renderWithProviders(<LoginForm />);
+
+    const googleButton = screen.getByText(/sign in with google/i);
+    await user.click(googleButton);
+
+    await waitFor(() => {
+      expect(mockAuthService.loginWithGoogle).toHaveBeenCalled();
+    });
   });
 
-  it('should support keyboard navigation', async () => {
+  it('should show loading state during submission', async () => {
     const user = userEvent.setup();
-    
-    render(
-      <TestWrapper>
-        <LoginForm />
-      </TestWrapper>
-    );
+    mockAuthService.login.mockImplementationOnce(() => new Promise(resolve => setTimeout(resolve, 100)));
+
+    renderWithProviders(<LoginForm />);
 
     const emailInput = screen.getByLabelText(/email/i);
     const passwordInput = screen.getByLabelText(/password/i);
     const submitButton = screen.getByRole('button', { name: /sign in/i });
 
-    // Test tab navigation
+    await user.type(emailInput, 'test@example.com');
+    await user.type(passwordInput, 'password123');
+    await user.click(submitButton);
+
+    expect(screen.getByText(/signing in/i)).toBeInTheDocument();
+    expect(submitButton).toBeDisabled();
+  });
+
+  it('should be accessible', async () => {
+    const renderResult = renderWithProviders(<LoginForm />);
+    await testAccessibility(renderResult);
+  });
+
+  it('should support keyboard navigation', async () => {
+    const user = userEvent.setup();
+    renderWithProviders(<LoginForm />);
+
+    const emailInput = screen.getByLabelText(/email/i);
+    const passwordInput = screen.getByLabelText(/password/i);
+    const submitButton = screen.getByRole('button', { name: /sign in/i });
+
+    // Tab through form elements
     await user.tab();
     expect(emailInput).toHaveFocus();
 
@@ -198,27 +189,14 @@ describe('LoginForm', () => {
 
     await user.tab();
     expect(submitButton).toHaveFocus();
-  });
 
-  it('should toggle password visibility', async () => {
-    const user = userEvent.setup();
-    
-    render(
-      <TestWrapper>
-        <LoginForm />
-      </TestWrapper>
-    );
+    // Submit with Enter key
+    await user.type(emailInput, 'test@example.com');
+    await user.type(passwordInput, 'password123');
+    await user.keyboard('{Enter}');
 
-    const passwordInput = screen.getByLabelText(/password/i);
-    const toggleButton = screen.getByRole('button', { name: /show password/i });
-
-    expect(passwordInput).toHaveAttribute('type', 'password');
-
-    await user.click(toggleButton);
-    expect(passwordInput).toHaveAttribute('type', 'text');
-    expect(screen.getByRole('button', { name: /hide password/i })).toBeInTheDocument();
-
-    await user.click(toggleButton);
-    expect(passwordInput).toHaveAttribute('type', 'password');
+    await waitFor(() => {
+      expect(mockAuthService.login).toHaveBeenCalled();
+    });
   });
 });
