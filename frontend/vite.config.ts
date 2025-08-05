@@ -20,4 +20,45 @@ export default defineConfig({
       },
     },
   },
+  build: {
+    // Enable code splitting
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          // Vendor chunks
+          'react-vendor': ['react', 'react-dom'],
+          'router-vendor': ['react-router-dom'],
+          'ui-vendor': ['@headlessui/react'],
+          'i18n-vendor': ['i18next', 'react-i18next'],
+          'http-vendor': ['axios'],
+        },
+      },
+    },
+    // Optimize chunk size
+    chunkSizeWarningLimit: 1000,
+    // Enable source maps for production debugging
+    sourcemap: true,
+    // Minify for production
+    minify: 'terser',
+    terserOptions: {
+      compress: {
+        drop_console: true,
+        drop_debugger: true,
+      },
+    },
+  },
+  // Optimize dependencies
+  optimizeDeps: {
+    include: [
+      'react',
+      'react-dom',
+      'react-router-dom',
+      '@headlessui/react',
+      'i18next',
+      'react-i18next',
+      'axios',
+      'clsx',
+      'tailwind-merge',
+    ],
+  },
 })

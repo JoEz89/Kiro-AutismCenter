@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Http;
 using Amazon.S3;
+using StackExchange.Redis;
 using AutismCenter.Application.Common.Interfaces;
 using AutismCenter.Application.Common.Settings;
 using AutismCenter.Domain.Interfaces;
@@ -17,14 +18,56 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
-        // Database
+        // Database with connection pooling
         services.AddDbContext<ApplicationDbContext>(options =>
-            options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
+        {
+            options.UseNpgsql(configuration.GetConnectionString("DefaultConnection"), npgsqlOptions =>
+            {
+                npgsqlOptions.EnableRetryOnFailure(
+                    maxRetryCount: 3,
+                    maxRetryDelay: TimeSpan.FromSeconds(5),
+                    errorCodesToAdd: null);
+                
+                // Enable connection pooling
+                npgsqlOptions.CommandTimeout(30);
+            });
+            
+            // Enable sensitive data logging in development only
+            if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
+            {
+                options.EnableSensitiveDataLogging();
+                options.EnableDetailedErrors();
+            }
+            
+            // Enable query splitting for better performance
+            options.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
+        });
 
         services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
 
         // Memory Cache
         services.AddMemoryCache();
+
+        // Redis Cache
+        var redisConnectionString = configuration.GetConnectionString("Redis");
+        if (!string.IsNullOrEmpty(redisConnectionString))
+        {
+            services.AddStackExchangeRedisCache(options =>
+            {
+                options.Configuration = redisConnectionString;
+                options.InstanceName = "AutismCenter";
+            });
+            
+            services.AddSingleton<IConnectionMultiplexer>(provider =>
+                ConnectionMultiplexer.Connect(redisConnectionString));
+            
+            services.AddScoped<ICacheService, RedisCacheService>();
+        }
+        else
+        {
+            // Fallback to in-memory cache if Redis is not configured
+            services.AddScoped<ICacheService, InMemoryCacheService>();
+        }
 
         // Unit of Work
         services.AddScoped<IUnitOfWork, UnitOfWork>();

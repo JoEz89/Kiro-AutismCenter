@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using AutismCenter.Application.Common.Interfaces;
 using AutismCenter.Domain.Common;
 using AutismCenter.Domain.Entities;
+using AutismCenter.Infrastructure.Data.Configurations;
 
 namespace AutismCenter.Infrastructure.Data;
 
@@ -36,6 +37,10 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
+        
+        // Apply performance indexes
+        modelBuilder.ConfigurePerformanceIndexes();
+        
         base.OnModelCreating(modelBuilder);
     }
 

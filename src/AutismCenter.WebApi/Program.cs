@@ -14,6 +14,9 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// Add response compression
+builder.Services.AddResponseCompression();
+
 // Add JWT Settings
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection(JwtSettings.SectionName));
 
@@ -72,6 +75,12 @@ var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 app.UseMiddleware<ExceptionHandlingMiddleware>();
+
+// Add performance middleware
+app.UsePerformanceMiddleware();
+
+// Add response compression
+app.UseResponseCompression();
 
 // Apply security middleware
 app.UseSecurityMiddleware(app.Environment);
