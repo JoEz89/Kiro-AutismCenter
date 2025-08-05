@@ -1,6 +1,7 @@
 using AutismCenter.Application;
 using AutismCenter.Application.Common.Settings;
 using AutismCenter.Infrastructure;
+using AutismCenter.WebApi.Configuration;
 using AutismCenter.WebApi.Middleware;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -64,22 +65,16 @@ builder.Services.AddAuthorization();
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 
-// Add CORS
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AllowReactApp", policy =>
-    {
-        policy.WithOrigins("http://localhost:5173", "http://localhost:3000")
-              .AllowAnyHeader()
-              .AllowAnyMethod()
-              .AllowCredentials();
-    });
-});
+// Add security services
+builder.Services.AddSecurityServices(builder.Configuration);
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 app.UseMiddleware<ExceptionHandlingMiddleware>();
+
+// Apply security middleware
+app.UseSecurityMiddleware(app.Environment);
 
 if (app.Environment.IsDevelopment())
 {
@@ -87,9 +82,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-// app.UseHttpsRedirection();
-
-app.UseCors("AllowReactApp");
+app.UseCors("SecureCorsPolicy");
 
 app.UseAuthentication();
 app.UseMiddleware<JwtMiddleware>();
